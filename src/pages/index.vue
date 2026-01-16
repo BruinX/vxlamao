@@ -1,5 +1,5 @@
 <template>
-  <div class="relative size-full">
+  <div class="relative size-full flex justify-center items-center">
     <!-- 轮播图 -->
     <div class="carousel w-full overflow-hidden h-56 md:h-145 relative">
       <div
@@ -34,7 +34,9 @@
       </div> -->
       </div>
     </div>
-    <div class="absolute max-w-7xl text-center text-2xl md:text-5xl font-bold text-red">
+    <div
+      class="absolute w-full top-1/5 md:top-1/3 max-w-7xl text-2xl md:text-5xl font-bold text-white pl-8"
+    >
       <p class="w-full">GET THE LOOK WITH PRIVACY</p>
       <p class="w-full">GET THE LOOK WITH PRIVACY</p>
     </div>
