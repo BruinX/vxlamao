@@ -1,74 +1,55 @@
 <template>
-  <div class="relative size-full flex justify-center items-center">
-    <!-- 轮播图 -->
-    <div class="carousel w-full overflow-hidden h-56 md:h-145 relative">
-      <div
-        v-for="(item, index) in carouselList"
-        :key="item.id"
-        :id="slideId(index)"
-        class="carousel-item relative w-full"
-      >
-        <img
-          src="../assets/image/Mask_group.png"
-          class="w-full object-cover"
-          :alt="item.alt"
-          loading="lazy"
-        />
-
-        <!-- 左右切换 -->
-        <!-- <div class="absolute inset-y-1/2 left-5 right-5 flex -translate-y-1/2 justify-between">
-        <a
-          :href="`#${slideId(prevIndex(index))}`"
-          class="btn btn-circle"
-          @click="activeIndex = prevIndex(index)"
-        >
-          ❮
-        </a>
-        <a
-          :href="`#${slideId(nextIndex(index))}`"
-          class="btn btn-circle"
-          @click="activeIndex = nextIndex(index)"
-        >
-          ❯
-        </a>
-      </div> -->
-      </div>
-    </div>
+  <div class="pt-16 lg:pt-0 flex justify-center">
+    <!-- 图片容器 -->
     <div
-      class="absolute w-full top-1/5 md:top-1/3 max-w-7xl text-2xl md:text-5xl font-bold text-white pl-8"
+  
+    data-aos="fade-down"
+      class="w-full relative overflow-hidden"
+      :style="{ height: `${pageData.screenheight}`}"
     >
-      <p class="w-full">GET THE LOOK WITH PRIVACY</p>
-      <p class="w-full">GET THE LOOK WITH PRIVACY</p>
+      <img
+        src="../assets/image/Mask_group.png"
+        alt="Mask_group"
+        loading="lazy"
+        class="w-full h-full object-cover"
+      />
+        <p class="banner_title sm:text-2xl md:text-4xl lg:text-5xl">Every Car Deserves Protection</p>
     </div>
+
+    <!-- <div class="container flex justify-center">
+      <div class="w-full h-50 bg-amber-400"></div>
+    </div> -->
+
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
 
-const carouselList = [
-  {
-    id: 1,
-    imageUrl: '../assets/image/Mask_group.png',
-    alt: 'GET THE LOOK WITH PRIVACY',
-  },
-]
+const pageData = reactive({
+  screenheight: '0px',
+})
 
-// 当前激活索引（方便扩展自动轮播/埋点）
-const activeIndex = ref(0)
+const calcHeight = () => {
+  const width = document.documentElement.clientWidth
+  pageData.screenheight = (width * 850) / 1760 + 'px'
+}
 
-const slideId = (index) => `slide-${index}`
+onMounted(() => {
+  calcHeight()
+  window.addEventListener('resize', calcHeight)
+})
 
-const prevIndex = (index) => (index === 0 ? carouselList.length - 1 : index - 1)
 
-const nextIndex = (index) => (index === carouselList.length - 1 ? 0 : index + 1)
 </script>
 
 <style lang="scss" scoped>
-.btn-circle {
-  background-color: rgba(255, 255, 255, 0.85);
-}
-.btn-circle:hover {
-  background-color: #fff;
+.banner_title {
+  position: absolute;
+  width: 80%;
+  top: 30%;
+  left: 10%;
+  font-weight: 600;
+  color: white;
+  text-align: center;
 }
 </style>

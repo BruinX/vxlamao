@@ -1,7 +1,7 @@
 <script setup></script>
 
 <template>
-  <myHead />
+  <myHead class="z-50" />
   <router-view />
 </template>
 

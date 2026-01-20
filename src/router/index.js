@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import AOS from 'aos'
 import index from '../pages/index.vue'
 
 const router = createRouter({
@@ -10,6 +11,10 @@ const router = createRouter({
       component: index,
     },
   ],
+})
+
+router.afterEach(() => {
+  AOS.refresh()
 })
 
 export default router

@@ -12,7 +12,6 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
-    Head: typeof import('./components/head/index.vue')['default']
     MyHead: typeof import('./components/myHead/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
@@ -21,7 +20,6 @@ declare module 'vue' {
 
 // For TSX support
 declare global {
-  const Head: typeof import('./components/head/index.vue')['default']
   const MyHead: typeof import('./components/myHead/index.vue')['default']
   const RouterLink: typeof import('vue-router')['RouterLink']
   const RouterView: typeof import('vue-router')['RouterView']
