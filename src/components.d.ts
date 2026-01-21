@@ -12,6 +12,12 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    copy: typeof import('./components/myHead copy/index.vue')['default']
+    ElButton: typeof import('element-plus/es')['ElButton']
+    ElForm: typeof import('element-plus/es')['ElForm']
+    ElFormItem: typeof import('element-plus/es')['ElFormItem']
+    ElInput: typeof import('element-plus/es')['ElInput']
+    MyFooter: typeof import('./components/myFooter/index.vue')['default']
     MyHead: typeof import('./components/myHead/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
@@ -20,6 +26,12 @@ declare module 'vue' {
 
 // For TSX support
 declare global {
+  const copy: typeof import('./components/myHead copy/index.vue')['default']
+  const ElButton: typeof import('element-plus/es')['ElButton']
+  const ElForm: typeof import('element-plus/es')['ElForm']
+  const ElFormItem: typeof import('element-plus/es')['ElFormItem']
+  const ElInput: typeof import('element-plus/es')['ElInput']
+  const MyFooter: typeof import('./components/myFooter/index.vue')['default']
   const MyHead: typeof import('./components/myHead/index.vue')['default']
   const RouterLink: typeof import('vue-router')['RouterLink']
   const RouterView: typeof import('vue-router')['RouterView']

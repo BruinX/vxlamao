@@ -1,18 +1,13 @@
 <template>
   <header
-    class="
-      w-full
-      fixed top-0 left-0 z-50
-      text-white
-      flex justify-center items-center
-      transition-all duration-300 backdrop-blur-sm bg-black/80  md:bg-black/5
-    "
-    :class="{ '!bg-black/50 backdrop-blur-none ': scrolled }">
+    class="w-full fixed top-0 left-0 z-50 text-white flex justify-center items-center transition-all duration-300 backdrop-blur-sm bg-black/80 md:bg-black/5"
+    :class="{ '!bg-black/50 backdrop-blur-none ': scrolled }"
+  >
     <!-- <div class="max-w-7xl mx-auto h-16 md:h-20 flex items-center justify-between px-4 md:px-6"> -->
-      <div class="container h-16 md:h-20 flex items-center justify-between px-4 md:px-0">
+    <div class="container h-16 md:h-20 flex items-center justify-between px-4 md:px-0">
       <!-- 左侧 Logo -->
       <div class="flex items-center gap-2">
-        <img src="../../assets/image/logo.png" alt="CFC Films" class="h-12 md:h-20 w-auto" />
+        <img src="../../assets/image/logo.avif" alt="logo" class="h-12 md:h-20 w-auto" />
       </div>
 
       <!-- 中间导航 (PC) -->
@@ -39,7 +34,13 @@
       <!-- 移动端 Hamburger -->
       <div class="md:hidden z-50">
         <button @click="isOpen = !isOpen">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <svg
+            class="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+          >
             <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
           </svg>
         </button>
@@ -47,10 +48,7 @@
     </div>
 
     <!-- 移动端菜单 -->
-    <div
-      v-show="isOpen"
-      class="md:hidden absolute top-full left-0 w-full bg-neutral-800"
-    >
+    <div v-show="isOpen" class="md:hidden absolute top-full left-0 w-full bg-neutral-800">
       <nav class="flex flex-col p-4 gap-3">
         <a
           v-for="item in navs"
@@ -66,7 +64,6 @@
 </template>
 
 <script setup lang="ts">
-
 const isOpen = ref(false)
 const scrolled = ref(false)
 
