@@ -1,25 +1,27 @@
 <template>
   <header
-    class="w-full fixed top-0 left-0 z-50 text-white flex justify-center items-center transition-all duration-300 backdrop-blur-sm bg-black/80 md:bg-black/5"
+    ref="headerRef"
+    class="w-full fixed top-0 left-0 z-50 text-white flex justify-center items-center transition-all duration-300 backdrop-blur-sm bg-black/80 md:bg-black/30"
     :class="{ '!bg-black/50 backdrop-blur-none ': scrolled }"
   >
     <!-- <div class="max-w-7xl mx-auto h-16 md:h-20 flex items-center justify-between px-4 md:px-6"> -->
     <div class="container h-16 md:h-20 flex items-center justify-between px-4 md:px-0">
       <!-- 左侧 Logo -->
-      <div class="flex items-center gap-2">
-        <img src="../../assets/image/logo.avif" alt="logo" class="h-12 md:h-20 w-auto" />
+      <div class="flex items-center gap-2" @click="goPath('/')">
+        <img src="../../assets/image/logo.png" alt="logo" class="h-12 md:h-20 w-auto" />
       </div>
 
       <!-- 中间导航 (PC) -->
       <nav class="hidden md:flex items-center gap-6 flex-1 ml-10">
-        <a
+        <div
           v-for="item in navs"
           :key="item.path"
-          href="#"
-          class="text-sm font-semibold tracking-wide hover:text-orange-500 transition-colors"
+          class="text-sm font-semibold tracking-wide hover:text-theme transition-colors select-none cursor-pointer"
+          :class="{ 'text-theme': pagePath == item.path }"
+          @click="goPath(item.path, { query: item.path })"
         >
           {{ item.label }}
-        </a>
+        </div>
       </nav>
 
       <!-- 右侧搜索 (PC) -->
@@ -33,7 +35,7 @@
 
       <!-- 移动端 Hamburger -->
       <div class="md:hidden z-50">
-        <button @click="isOpen = !isOpen">
+        <button @click.stop="isOpen = !isOpen">
           <svg
             class="w-6 h-6"
             fill="none"
@@ -48,41 +50,83 @@
     </div>
 
     <!-- 移动端菜单 -->
-    <div v-show="isOpen" class="md:hidden absolute top-full left-0 w-full bg-neutral-800">
-      <nav class="flex flex-col p-4 gap-3">
-        <a
+    <div
+      v-show="isOpen"
+      class="md:hidden absolute top-full left-0 w-full bg-neutral-800"
+      data-aos="fade-down"
+      @click.stop
+    >
+      <nav class="flex flex-col p-4 gap-3" @click="isOpen = false">
+        <div
           v-for="item in navs"
           :key="item.path"
           href="#"
           class="text-sm font-semibold hover:text-orange-500"
+          :class="{ 'text-orange-500': pagePath == item.path }"
+          @click="goPath(item.path, { query: item.path })"
         >
           {{ item.label }}
-        </a>
+        </div>
       </nav>
     </div>
   </header>
 </template>
 
-<script setup lang="ts">
+<script setup>
 const isOpen = ref(false)
 const scrolled = ref(false)
+const router = useRouter()
+const route = useRoute()
+const headerRef = ref(null)
 
 const navs = [
-  { label: 'COVERAGE', path: '/coverage' },
   { label: 'PRODUCTS', path: '/products' },
-  { label: 'SHOP', path: '/shop' },
+  { label: 'WARRANTY', path: '/Warranty' },
   { label: 'ABOUT US', path: '/about' },
 ]
 
 const handleScroll = () => {
   scrolled.value = window.scrollY > 100
 }
+const pagePath = ref('/')
+
+watchEffect(() => {
+  if (route.path) {
+    pagePath.value = route.path
+    console.log('pagePath.value', route.path)
+  }
+})
+
+const handleClickOutside = (e) => {
+  if (!isOpen.value) return
+  if (!headerRef.value) return
+
+  // 如果点击不在 header 内
+  if (!headerRef.value.contains(e.target)) {
+    isOpen.value = false
+  }
+}
 
 onMounted(() => {
   window.addEventListener('scroll', handleScroll, { passive: true })
+  document.addEventListener('click', handleClickOutside)
 })
 
 onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll)
+  document.removeEventListener('click', handleClickOutside)
 })
+
+const goPath = (path, query) => {
+  if (query) {
+    router.push({
+      path: `${path}`,
+      query: query,
+    })
+  } else {
+    router.push({
+      path: `${path}`,
+    })
+  }
+}
 </script>

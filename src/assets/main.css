@@ -1,2 +1,9 @@
-@import "tailwindcss";
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import './iconfont/iconfont.css';
 @plugin "daisyui";
+
+/* 定义主题 */
+@theme {
+  --color-theme: #414449;
+}
