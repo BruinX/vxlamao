@@ -1,7 +1,60 @@
 <template>
-  <div class="pt-16 md:pt-20 h-[80vh] flex justify-center items-center text-6xl">products</div>
+  <div
+    data-aos="fade-down"
+    class="w-full h-[50dvh] md:h-screen pt-16 md:pt-20 relative overflow-hidden"
+  >
+    <img
+      :src="`/images/${productInfo.imaPath}`"
+      alt="Mask_group"
+      loading="lazy"
+      class="w-full h-full object-cover"
+    />
+    <div class="banner_title text-white pt-6 md:pt-0">
+      <BlurReveal :delay="0.2" :duration="0.75" class="">
+        <p
+          class="font-bold tracking-tighter text-3xl md:text-4xl lg:text-7xl"
+          :class="` text-${productInfo.color}`"
+        >
+          {{ productInfo.title }}
+        </p>
+      </BlurReveal>
+    </div>
+  </div>
+
+  <div class="text-center py-10 md:py-28">
+    <p class="font-bold text-xl sm:text-2xl md:text-4xl lg:text-5xl">{{ productInfo.title }}</p>
+    <p class="sm:text-lg md:text-xl lg:text-2xl md:max-w-1/2 mx-auto px-2 pt-6 text-gray-500">
+      Stand out with XLAMAO® Color Paint Protection Film. Combining bold color styling with durable
+      TPU protection, it transforms your car’s look while guarding against scratches, weather, and
+      fading — beauty with built-in defense.
+    </p>
+  </div>
+
+  <div
+    class="relative w-full h-[50dvh] md:h-[80dvh] bg-no-repeat bg-cover bg-center cursor-pointer"
+    style="background-image: url('/images/product_bg.jpg')"
+  >
+    <!-- mask -->
+    <div class="absolute inset-0 bg-black/35"></div>
+    <div class="relative container mx-auto text-white p-4 md:pt-8">
+      <p class="font-bold text-xl sm:text-2xl md:text-4xl lg:text-5xl">PRODUCT FEATURES</p>
+    </div>
+  </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup>
+import { getPageData } from '../util/globalUtil.js'
+const router = useRouter()
+const route = useRoute()
+const globalPageData = getPageData()
+const productInfo = computed(() =>
+  globalPageData.common.product.find((item) => item.id == route.query.id),
+)
+
+onMounted(() => {
+  console.log('productsRouterQuery', route.query)
+  console.log('productInfo', productInfo.value)
+})
+</script>
 
 <style lang="scss" scoped></style>

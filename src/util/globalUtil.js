@@ -32,24 +32,28 @@ export const getPageData = () => {
       head: [],
       product: [
         {
+          id: 1,
           imaPath: 'product_view1.jpg',
           path: '/',
           title: 'Color film',
           color: 'white',
         },
         {
+          id: 2,
           imaPath: 'product_view2.jpg',
           path: '/',
           title: 'TPU invisible car clothes',
           color: 'white',
         },
         {
+          id: 3,
           imaPath: 'product_view3.jpg',
           path: '/',
           title: 'Window film',
           color: 'black',
         },
         {
+          id: 4,
           imaPath: 'product_view4.jpg',
           path: '/',
           title: 'Black film of window frame',

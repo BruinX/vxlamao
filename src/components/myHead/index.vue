@@ -51,9 +51,8 @@
 
     <!-- 移动端菜单 -->
     <div
-      v-show="isOpen"
-      class="md:hidden absolute top-full left-0 w-full bg-neutral-800"
-      data-aos="fade-down"
+      class="md:hidden absolute top-full left-0 w-full bg-neutral-800 duration-300"
+      :class="{ 'h-40': isOpen, 'h-0 overflow-hidden ': !isOpen }"
       @click.stop
     >
       <nav class="flex flex-col p-4 gap-3" @click="isOpen = false">
@@ -81,7 +80,7 @@ const headerRef = ref(null)
 
 const navs = [
   { label: 'PRODUCTS', path: '/products' },
-  { label: 'WARRANTY', path: '/Warranty' },
+  { label: 'WARRANTY', path: '/warranty' },
   { label: 'ABOUT US', path: '/about' },
 ]
 

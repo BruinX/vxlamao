@@ -2,7 +2,7 @@
 
 <template>
   <MyHead class="z-50" />
-  <router-view class="overflow-hidden" />
+  <router-view />
   <MyFooter class="z-40" />
 </template>
 

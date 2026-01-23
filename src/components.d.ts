@@ -12,7 +12,11 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    BlurReveal: typeof import('./components/blurReveal/index.vue')['default']
+    BoxReveal: typeof import('./components/boxReveal/index.vue')['default']
+    copy: typeof import('./components/blurReveal copy/index.vue')['default']
     Globe: typeof import('./components/globe/index.vue')['default']
+    Magnet: typeof import('./components/magnet/index.vue')['default']
     MyFooter: typeof import('./components/myFooter/index.vue')['default']
     MyHead: typeof import('./components/myHead/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
@@ -22,7 +26,11 @@ declare module 'vue' {
 
 // For TSX support
 declare global {
+  const BlurReveal: typeof import('./components/blurReveal/index.vue')['default']
+  const BoxReveal: typeof import('./components/boxReveal/index.vue')['default']
+  const copy: typeof import('./components/blurReveal copy/index.vue')['default']
   const Globe: typeof import('./components/globe/index.vue')['default']
+  const Magnet: typeof import('./components/magnet/index.vue')['default']
   const MyFooter: typeof import('./components/myFooter/index.vue')['default']
   const MyHead: typeof import('./components/myHead/index.vue')['default']
   const RouterLink: typeof import('vue-router')['RouterLink']

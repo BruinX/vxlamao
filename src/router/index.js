@@ -7,6 +7,19 @@ import about from '../pages/about.vue'
 
 const router = createRouter({
   history: createWebHistory(),
+  scrollBehavior(to, from, savedPosition) {
+    // 浏览器前进 / 后退
+    if (savedPosition) {
+      return savedPosition
+    }
+
+    // 普通路由跳转
+    return {
+      top: 0,
+      left: 0,
+      behavior: 'smooth', // 可选：平滑滚动
+    }
+  },
   routes: [
     {
       path: '/',
