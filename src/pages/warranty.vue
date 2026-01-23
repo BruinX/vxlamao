@@ -2,11 +2,11 @@
   <div class="relative text-white">
     <!-- mask -->
     <div class="absolute inset-0 bg-black/50"></div>
-    <img
+    <!-- <img
       class="w-full h-[80dvh] md:h-screen object-cover z-0"
       src="`/images/WARRANTY_bg.png`"
       alt="WARRANTY_bg"
-    />
+    /> -->
     <div
       class="absolute top-1/2 left-1/2 -translate-1/2 px-4 text-center items-center justify-center overflow-hidden"
     >

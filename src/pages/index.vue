@@ -27,7 +27,7 @@
     <div class="relative text-white">
       <img
         class="w-full h-[400px] md:h-screen object-cover z-0"
-        src="`/images/idnex_warranty_bg.jpg`"
+        src="`/images/index_warranty_bg.jpg`"
         alt="idnex_warranty_bg"
       />
       <div
