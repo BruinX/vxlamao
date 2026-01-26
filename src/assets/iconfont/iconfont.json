@@ -6,6 +6,34 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "15567389",
+      "name": "水源地",
+      "font_class": "shuiyuandi",
+      "unicode": "e623",
+      "unicode_decimal": 58915
+    },
+    {
+      "icon_id": "2315232",
+      "name": "时空滤网",
+      "font_class": "fanghuguolv",
+      "unicode": "e622",
+      "unicode_decimal": 58914
+    },
+    {
+      "icon_id": "20583490",
+      "name": "防刮",
+      "font_class": "fanggua",
+      "unicode": "e603",
+      "unicode_decimal": 58883
+    },
+    {
+      "icon_id": "41402457",
+      "name": "防水防尘",
+      "font_class": "fangshuifangchen",
+      "unicode": "e6f4",
+      "unicode_decimal": 59124
+    },
+    {
       "icon_id": "2154961",
       "name": "搜索",
       "font_class": "sousuo",
