@@ -40,14 +40,20 @@
     <div class="relative container mx-auto text-white p-4 md:pt-16">
       <p class="font-bold text-xl sm:text-2xl md:text-4xl lg:text-5xl">PRODUCT FEATURES</p>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-10 pt-2 md:pt-10">
-        <p v-for="item in 4" class="sm:text-lg md:text-xl lg:text-2xl pt-6 flex justify-start items-center">
-          <div class="radial-progress text-white shrink-0 mr-3" style="--value:70; --thickness: 4px; --size: 4rem" aria-valuenow="70" role="progressbar">
+        <div
+          v-for="item in 4"
+          class="sm:text-lg md:text-xl lg:text-2xl pt-6 flex justify-start items-center"
+        >
+          <div
+            class="radial-progress text-white shrink-0 mr-3"
+            style="--value: 70; --thickness: 4px; --size: 4rem"
+            aria-valuenow="70"
+            role="progressbar"
+          >
             <i class="iconfont icon-fangshuifangchen !text-3xl"></i>
           </div>
-          <p> - UV and stain-resistant for a lasting finish in any climate.
-          </p>
-        </p>
-
+          <p>- UV and stain-resistant for a lasting finish in any climate.</p>
+        </div>
       </div>
     </div>
   </div>
