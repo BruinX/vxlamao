@@ -1,9 +1,7 @@
 <template>
-  <header
-    ref="headerRef"
+  <header ref="headerRef" id="headers"
     class="w-full fixed top-0 left-0 z-50 text-white flex justify-center items-center transition-all duration-300 backdrop-blur-sm bg-black/80 md:bg-black/30"
-    :class="{ '!bg-black/50 backdrop-blur-none ': scrolled }"
-  >
+    :class="{ '!bg-black/50 backdrop-blur-none ': scrolled }">
     <!-- <div class="max-w-7xl mx-auto h-16 md:h-20 flex items-center justify-between px-4 md:px-6"> -->
     <div class="container h-16 md:h-20 flex items-center justify-between px-4 md:px-0">
       <!-- 左侧 Logo -->
@@ -14,37 +12,30 @@
       <!-- 中间导航 (PC) -->
       <nav class="hidden md:flex items-center gap-6 flex-1 ml-10">
         <template v-for="item in navs" :key="item.path">
-          <div
-            v-if="item.label !== 'PRODUCTS'"
+          <div v-if="item.label !== 'PRODUCTS'"
             class="text-sm font-semibold tracking-wide hover:text-orange-500 transition-colors select-none cursor-pointer"
-            :class="{ 'text-orange-500': pagePath == item.path }"
-            @click="goPath(item.path, { query: item.path })"
-          >
+            :class="{ 'text-orange-500': pagePath == item.path }" @click="goPath(item.path, { query: item.path })">
             {{ item.label }}
           </div>
 
-          <div v-else class="dropdown" :class="openDropdown ? 'dropdown-open' : 'dropdown-close'">
-            <div
-              tabindex="0"
-              role="button"
+          <div v-else-if="item.label === 'PRODUCTS'" class="dropdown" ref="dropdownRef"
+            :class="openDropdown ? 'dropdown-open' : 'dropdown-close'">
+            <div tabindex="0" role="button"
               class="text-sm font-semibold tracking-wide hover:text-orange-500 transition-colors select-none cursor-pointer"
-              :class="{ 'text-orange-500': pagePath == item.path }"
-              @click="openDropdown = !openDropdown"
-            >
+              :class="{ 'text-orange-500': pagePath == item.path }" @click.stop="openDropdown = !openDropdown">
               {{ item.label }}
             </div>
-            <ul
-              tabindex="-1"
-              class="dropdown-content menu bg-base-100 rounded-box z-1 w-64 p-2 shadow-sm"
-            >
-              <li
-                v-for="liItem in globalPageData.common.product"
-                :key="liItem.id"
+            <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box z-1 w-64 p-2 shadow-sm">
+              <li v-for="liItem in globalPageData.common.product" :key="liItem.id"
                 class="text-sm font-semibold tracking-wide hover:text-orange-500 transition-colors select-none cursor-pointer text-theme"
-                :class="{ '!text-orange-500': productsId == liItem.id }"
-                @click.stop="goPath('/products', { id: liItem.id })"
-              >
-                <p>{{ liItem.title }}</p>
+                :class="{ '!text-orange-500': productsId == liItem.id }" @click="
+                  () => {
+                    goPath('/products', { id: liItem.id })
+                    openDropdown = false
+                  }
+                ">
+                <span>{{ liItem.title }}</span>
+
               </li>
             </ul>
           </div>
@@ -64,13 +55,7 @@
       <!-- 移动端 Hamburger -->
       <div class="md:hidden z-50">
         <button @click.stop="isOpen = !isOpen">
-          <svg
-            class="w-6 h-6"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            viewBox="0 0 24 24"
-          >
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
           </svg>
         </button>
@@ -78,30 +63,20 @@
     </div>
 
     <!-- 移动端菜单 -->
-    <div
-      class="md:hidden absolute top-full left-0 w-full bg-neutral-800 duration-300"
-      :class="{ ' h-80 ': isOpen, 'h-0 overflow-hidden ': !isOpen }"
-      @click.stop
-    >
+    <div class="md:hidden absolute top-full left-0 w-full bg-neutral-800 duration-300"
+      :class="{ ' h-80 ': isOpen, 'h-0 overflow-hidden ': !isOpen }" @click.stop>
       <nav class="flex flex-col p-4 gap-3">
         <template v-for="item in navs" :key="item.path">
-          <div
-            v-if="item.label !== 'PRODUCTS'"
-            class="font-semibold hover:text-orange-500"
-            :class="{ 'text-orange-500': pagePath == item.path }"
-            @click="goPath(item.path, { query: item.path })"
-          >
+          <div v-if="item.label !== 'PRODUCTS'" class="font-semibold hover:text-orange-500"
+            :class="{ 'text-orange-500': pagePath == item.path }" @click="goPath(item.path, { query: item.path })">
             {{ item.label }}
           </div>
           <details v-else class="collapse" name="my-accordion-det-1">
             <summary class="collapse-title font-semibold p-0">{{ item.label }}</summary>
-            <div
-              v-for="liItem in globalPageData.common.product"
-              :key="liItem.id"
+            <div v-for="liItem in globalPageData.common.product" :key="liItem.id"
               class="collapse-content ml-4 py-2 p-0 border-b border-orange-500"
               :class="{ '!text-orange-500': productsId == liItem.id }"
-              @click.stop="goPath('/products', { id: liItem.id })"
-            >
+              @click.stop="goPath('/products', { id: liItem.id })">
               <p>{{ liItem.title }}</p>
             </div>
           </details>
@@ -114,13 +89,15 @@
 <script setup>
 import { getPageData } from '../../util/globalUtil.js'
 const globalPageData = getPageData()
+const router = useRouter()
+const route = useRoute()
 
 const isOpen = ref(false)
 const scrolled = ref(false)
-const router = useRouter()
-const route = useRoute()
-const headerRef = ref(null)
 const openDropdown = ref(false)
+
+const headerRef = ref(null)
+const dropdownRef = ref([])
 
 const navs = [
   { label: 'PRODUCTS', path: '/products' },
@@ -153,14 +130,25 @@ const handleClickOutside = (e) => {
   }
 }
 
+const onClickOutside = (e) => {
+  const isInside = dropdownRef.value.some(el =>
+    el.contains(e.target)
+  )
+  if (!isInside) {
+    openDropdown.value = false
+  }
+}
+
 onMounted(() => {
   window.addEventListener('scroll', handleScroll, { passive: true })
   document.addEventListener('click', handleClickOutside)
+  document.addEventListener('click', onClickOutside)
 })
 
 onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll)
   document.removeEventListener('click', handleClickOutside)
+  document.removeEventListener('click', onClickOutside)
 })
 
 const goPath = (path, query) => {

@@ -13,6 +13,14 @@ const router = createRouter({
       return savedPosition
     }
 
+    //只有 products 页面不需要平滑滚动
+    if (
+      to.name === 'products' &&
+      from.name === 'products'
+    ) {
+      return false
+    }
+
     // 普通路由跳转
     return {
       top: 0,

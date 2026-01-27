@@ -24,6 +24,32 @@ export const checkValueOfEmpty = (value) => {
   return true
 }
 
+/**
+ * 點擊跳轉
+ * @param id  元素id
+ */
+export const goAnchor = (id) => {
+  const headersDom = document.getElementById('headers');
+  if (headersDom) {
+    let topNumber = 0;
+    topNumber = getOffsetTop(id) - headersDom.offsetHeight;
+    window.scrollTo({
+      top: topNumber,
+      behavior: 'smooth'
+    });
+  }
+};
+
+/**
+ * 獲取元素到頂部的距離
+ * @param id  元素id
+ * @returns number位置
+ */
+const getOffsetTop = (id) => {
+  const el = document.getElementById(id);
+  return el ? el.offsetTop : 0;
+};
+
 export const getPageData = () => {
   return {
     pageSize: 10,

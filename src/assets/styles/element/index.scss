@@ -1,0 +1,4 @@
+@forward './override';
+
+// 再完整引入 Element Plus 样式
+@use 'element-plus/theme-chalk/src/index.scss' as *;
