@@ -22,13 +22,14 @@
             :class="openDropdown ? 'dropdown-open' : 'dropdown-close'">
             <div tabindex="0" role="button"
               class="text-sm font-semibold tracking-wide hover:text-orange-500 transition-colors select-none cursor-pointer"
-              :class="{ 'text-orange-500': pagePath == item.path }" @click.stop="openDropdown = !openDropdown">
+              :class="{ 'text-orange-500': pagePath == item.path || $route.name === 'productsInfo' }"
+              @click.stop="openDropdown = !openDropdown">
               {{ item.label }}
             </div>
             <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box z-1 w-64 p-2 shadow-sm">
               <li v-for="liItem in globalPageData.common.product" :key="liItem.id"
                 class="text-sm font-semibold tracking-wide hover:text-orange-500 transition-colors select-none cursor-pointer text-theme"
-                :class="{ '!text-orange-500': productsId == liItem.id }" @click="
+                :class="{ '!text-orange-500': productsId == liItem.id && $route.name === 'products' }" @click="
                   () => {
                     goPath('/products', { id: liItem.id })
                     openDropdown = false
@@ -72,10 +73,12 @@
             {{ item.label }}
           </div>
           <details v-else class="collapse" name="my-accordion-det-1">
-            <summary class="collapse-title font-semibold p-0">{{ item.label }}</summary>
+            <summary class="collapse-title font-semibold p-0"
+              :class="{ 'text-orange-500': pagePath == item.path || $route.name === 'productsInfo' }">{{ item.label }}
+            </summary>
             <div v-for="liItem in globalPageData.common.product" :key="liItem.id"
               class="collapse-content ml-4 py-2 p-0 border-b border-orange-500"
-              :class="{ '!text-orange-500': productsId == liItem.id }"
+              :class="{ '!text-orange-500': productsId == liItem.id && $route.name === 'products' }"
               @click.stop="goPath('/products', { id: liItem.id })">
               <p>{{ liItem.title }}</p>
             </div>

@@ -1,5 +1,5 @@
 <template>
-  <template v-if="true">
+  <template v-if="$route.name === 'products'">
     <div data-aos="fade-down" class="w-full h-[50dvh] md:h-screen pt-16 md:pt-20 relative overflow-hidden">
       <img :src="`/images/${productInfo.imaPath}`" alt="Mask_group" loading="lazy" class="w-full h-full object-cover" />
       <div class="banner_title pt-6 md:pt-0">
@@ -36,58 +36,65 @@
         </div>
       </div>
     </div>
+    <el-row id="productList" class="tac container mx-auto py-5 lg:py-10">
+      <div class="hidden-lg-and-up px-4 w-full">
+        <el-dropdown trigger="click" size="large" @command="handleCommand">
+          <el-button class=""> Products
+            <el-icon class="el-icon--circle">
+              <arrow-down />
+            </el-icon>
+          </el-button>
+
+          <template #dropdown>
+            <el-dropdown-menu class="product-dropdown">
+              <el-dropdown-item :disabled="item.id == productsId" v-for="item in globalPageData.common.product"
+                :key="item.id" :command="String(item.id)">{{
+                  item.title
+                }}</el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
+        <div data-aos="fade-down" class="mx-auto text-center text-2xl font-bold pt-4">{{ productInfo.title }}</div>
+      </div>
+
+      <el-col :span="0" :lg="5">
+        <h5 class="mb-2 text-2xl">Products</h5>
+        <el-menu :default-active="productsId" class="select-none" @select="onMenuSelect">
+          <el-menu-item class="truncate" v-for="item in globalPageData.common.product" :key="item.id"
+            :index="String(item.id)">
+            {{ item.title }}
+          </el-menu-item>
+        </el-menu>
+      </el-col>
+      <el-col :span="24" :lg="19" class="py-6 md:py-10 px-4 !grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <el-card v-for="m in 10" class=" cursor-pointer active:scale-95 transition-all duration-300" shadow="hover"
+          style="--el-card-padding: 10px"
+          @click="goPath('/products/productsInfo', { id: productInfo.id, productId: '200' })">
+          <img :src="`/images/${productInfo.imaPath}`" class="w-full " />
+          <template #footer>
+            <div class="">
+              <p class="font-bold">{{ productInfo.title }}</p>
+              <p class="text-gray-500 text-sm">No.{{ productInfo.id + m }}{{ m }}</p>
+            </div>
+          </template>
+        </el-card>
+
+      </el-col>
+      <div class="w-full mb-6 px-4 flex justify-end">
+        <el-pagination background layout="prev, pager, next" v-model:current-page="pageData.currentPage"
+          :pager-count="pageData.screenWidth > 620 ? 7 : 5" :total="100" @current-change="handleCurrentChange" />
+      </div>
+    </el-row>
   </template>
-  <el-row id="productList" class="tac container mx-auto py-5 lg:py-10">
-    <div class="hidden-lg-and-up px-4 w-full">
-      <el-dropdown trigger="click" size="large" @command="handleCommand">
-        <h5 class="cursor-pointer text-2xl text-black ">
-          Products
-          <el-icon class="el-icon--circle">
-            <arrow-down />
-          </el-icon>
-        </h5>
-        <template #dropdown>
-          <el-dropdown-menu class="product-dropdown">
-            <el-dropdown-item :disabled="item.id == productsId" v-for="item in globalPageData.common.product"
-              :key="item.id" :command="String(item.id)">{{
-                item.title
-              }}</el-dropdown-item>
-          </el-dropdown-menu>
-        </template>
-      </el-dropdown>
-      <div data-aos="fade-down" class="mx-auto text-center text-2xl font-bold pt-4">{{ productInfo.title }}</div>
-    </div>
-
-    <el-col :span="0" :lg="5">
-      <h5 class="mb-2 text-2xl">Products</h5>
-      <el-menu :default-active="productsId" class="select-none" @select="onMenuSelect">
-        <el-menu-item class="truncate" v-for="item in globalPageData.common.product" :key="item.id"
-          :index="String(item.id)">
-          {{ item.title }}
-        </el-menu-item>
-      </el-menu>
-    </el-col>
-    <el-col :span="24" :lg="19" class="py-6 md:py-10 px-4 !grid grid-cols-2 lg:grid-cols-4 gap-4">
-      <el-card v-for="m in 10" class=" cursor-pointer active:scale-95 transition-all duration-300" shadow="hover"
-        style="--el-card-padding: 10px">
-        <img :src="`/images/${productInfo.imaPath}`" class="w-full " />
-        <template #footer>
-          <div class="">
-            <p class="font-bold">{{ productInfo.title }}</p>
-            <p class="text-gray-500 text-sm">No.{{ productInfo.id + m }}{{ m }}</p>
-          </div>
-        </template>
-      </el-card>
-
-    </el-col>
-  </el-row>
 
 
+  <!-- 子路由渲染区 -->
+  <router-view />
 </template>
 
 <script setup>
-import { getPageData, goAnchor } from '../util/globalUtil.js'
-import { useCounterStore } from '../stores/counter.js'
+import { getPageData, goAnchor } from '../../util/globalUtil.js'
+import { useCounterStore } from '../../stores/counter.js'
 import 'element-plus/theme-chalk/display.css'
 const pageStore = useCounterStore()
 const router = useRouter()
@@ -97,6 +104,17 @@ const productInfo = computed(() =>
   globalPageData.common.product.find((item) => item.id == route.query.id),
 )
 const productsId = computed(() => String(route.query.id))
+
+const pageData = reactive({
+  screenWidth: window.innerWidth,
+  currentPage: 1,
+
+});
+
+// 分页
+const handleCurrentChange = val => {
+  pageData.currentPage = val;
+};
 
 const handleCommand = (command) => {
   goPath('/products', { id: command })

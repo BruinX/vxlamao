@@ -2,8 +2,10 @@ import { createRouter, createWebHistory } from 'vue-router'
 import AOS from 'aos'
 import index from '../pages/index.vue'
 import warranty from '../pages/warranty.vue'
-import products from '../pages/products.vue'
+import products from '../pages/products/index.vue'
 import about from '../pages/about.vue'
+import productsInfo from '../pages/products/info.vue'
+
 
 const router = createRouter({
   history: createWebHistory(),
@@ -43,6 +45,14 @@ const router = createRouter({
       path: '/products',
       name: 'products',
       component: products,
+      children: [
+        {
+          path: 'productsInfo',
+          name: 'productsInfo',
+          component: productsInfo,
+        },
+      ],
+
     },
     {
       path: '/about',
