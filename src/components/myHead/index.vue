@@ -14,7 +14,8 @@
         <template v-for="item in navs" :key="item.path">
           <div v-if="item.label !== 'PRODUCTS'"
             class="text-sm font-semibold tracking-wide hover:text-orange-500 transition-colors select-none cursor-pointer"
-            :class="{ 'text-orange-500': pagePath == item.path }" @click="goPath(item.path, { query: item.path })">
+            :class="{ 'text-orange-500': pagePath == item.path || (pagePath == '/warranty/bill' && item.path === '/warranty') }"
+            @click="goPath(item.path)">
             {{ item.label }}
           </div>
 
@@ -26,7 +27,7 @@
               @click.stop="openDropdown = !openDropdown">
               {{ item.label }}
             </div>
-            <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box z-1 w-64 p-2 shadow-sm">
+            <ul tabindex="-1" class="dropdown-content menu bg-white/98 rounded-box z-1 w-64 p-2 shadow-sm">
               <li v-for="liItem in globalPageData.common.product" :key="liItem.id"
                 class="text-sm font-semibold tracking-wide hover:text-orange-500 transition-colors select-none cursor-pointer text-theme"
                 :class="{ '!text-orange-500': productsId == liItem.id && $route.name === 'products' }" @click="
@@ -69,7 +70,7 @@
       <nav class="flex flex-col p-4 gap-3">
         <template v-for="item in navs" :key="item.path">
           <div v-if="item.label !== 'PRODUCTS'" class="font-semibold hover:text-orange-500"
-            :class="{ 'text-orange-500': pagePath == item.path }" @click="goPath(item.path, { query: item.path })">
+            :class="{ 'text-orange-500': pagePath == item.path }" @click="goPath(item.path)">
             {{ item.label }}
           </div>
           <details v-else class="collapse" name="my-accordion-det-1">
@@ -102,11 +103,7 @@ const openDropdown = ref(false)
 const headerRef = ref(null)
 const dropdownRef = ref([])
 
-const navs = [
-  { label: 'PRODUCTS', path: '/products' },
-  { label: 'WARRANTY', path: '/warranty' },
-  { label: 'ABOUT US', path: '/about' },
-]
+const navs = globalPageData.common.headerNavs
 
 const handleScroll = () => {
   scrolled.value = window.scrollY > 100
@@ -118,8 +115,6 @@ watchEffect(() => {
   if (route.path) {
     pagePath.value = route.path
     productsId.value = route.query.id
-    console.log('pagePath.value', route.path)
-    console.log('pagePath', route)
   }
 })
 

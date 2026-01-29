@@ -39,17 +39,15 @@
       <div class="h-40 pt-6 md:pt-0 text-center hidden md:block">
         <h2 class="font-bold pb-6">CASE</h2>
         <p class="text-sm text-white/70 pb-3 duration-75 active:text-white xl:hover:text-white select-none">
-          CASE
+          Case
         </p>
       </div>
     </div>
     <div class="text-[0.7rem] lg:text-sm text-center py-5 z-10 text-white">
-      {{ screenWidth }}
-
       Copyright © {{ dayjs().year() }}. xxxxx有限公司. All rights reserved.
     </div>
-    <el-backtop :right="screenWidth > 1000 ? 100 : 20" :bottom="screenWidth > 1000 ? 100 : 50" />
   </footer>
+
 </template>
 
 <script setup lang="ts">
@@ -58,7 +56,7 @@ import { getPageData } from '../../util/globalUtil.js'
 const globalPageData = getPageData()
 
 const router = useRouter()
-const screenWidth = computed(() => window.innerWidth)
+
 
 const goProduct = (path, query) => {
   if (path) {

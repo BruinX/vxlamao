@@ -55,7 +55,12 @@ export const getPageData = () => {
     pageSize: 10,
     pageNum: 1,
     common: {
-      head: [],
+      headerNavs: [
+        { label: 'PRODUCTS', path: '/products' },
+        { label: 'WARRANTY', path: '/warranty' },
+        { label: 'CASE', path: '/case' },
+        { label: 'ABOUT US', path: '/about' },
+      ],
       product: [
         {
           id: 1,

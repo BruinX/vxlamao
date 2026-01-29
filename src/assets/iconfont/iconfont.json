@@ -6,6 +6,20 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "31061287",
+      "name": "dc-b-warranty",
+      "font_class": "dc-b-warranty",
+      "unicode": "e6c9",
+      "unicode_decimal": 59081
+    },
+    {
+      "icon_id": "31061288",
+      "name": "dc-b-warranty-expired",
+      "font_class": "dc-b-warranty-expired",
+      "unicode": "e6ca",
+      "unicode_decimal": 59082
+    },
+    {
       "icon_id": "15567389",
       "name": "水源地",
       "font_class": "shuiyuandi",

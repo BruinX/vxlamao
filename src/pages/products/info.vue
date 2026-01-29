@@ -1,7 +1,12 @@
 <template>
   <div class="container mx-auto pt-16 md:pt-20 ">
-    <div class="card-base h-16 flex justify-start  items-center">
+    <div class="card-base h-16 flex justify-start items-center">
       <el-breadcrumb separator="/">
+        <el-breadcrumb-item :to="{ path: '/' }"><template #default>
+            <el-icon size="16">
+              <HomeFilled />
+            </el-icon>
+          </template></el-breadcrumb-item>
         <el-breadcrumb-item :to="{
           path: '/products',
           query: { id: productInfo.id }

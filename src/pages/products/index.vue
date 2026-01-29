@@ -69,7 +69,7 @@
       <el-col :span="24" :lg="19" class="py-6 md:py-10 px-4 !grid grid-cols-2 lg:grid-cols-4 gap-4">
         <el-card v-for="m in 10" class=" cursor-pointer active:scale-95 transition-all duration-300" shadow="hover"
           style="--el-card-padding: 10px"
-          @click="goPath('/products/productsInfo', { id: productInfo.id, productId: '200' })">
+          @click="navigate('/products/productsInfo', { id: productInfo.id, productId: '200' })">
           <img :src="`/images/${productInfo.imaPath}`" class="w-full " />
           <template #footer>
             <div class="">
@@ -117,25 +117,17 @@ const handleCurrentChange = val => {
 };
 
 const handleCommand = (command) => {
-  goPath('/products', { id: command })
+  navigate('/products', { id: command })
 }
 const onMenuSelect = (index) => {
   // index === el-menu-item 的 index
-  goPath('/products', { id: index })
+  navigate('/products', { id: index })
 }
 
-const goPath = (path, query) => {
+
+const navigate = (path, query) => {
   pageStore.setPageLoading(true)
-  if (query) {
-    router.push({
-      path: `${path}`,
-      query: query,
-    })
-  } else {
-    router.push({
-      path: `${path}`,
-    })
-  }
+  router.push(query ? { path, query } : { path })
   const randomDelay = (min = 100, max = 500) => {
     return Math.floor(Math.random() * (max - min + 1)) + min
   }

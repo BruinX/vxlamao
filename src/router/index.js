@@ -1,10 +1,14 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import AOS from 'aos'
 import index from '../pages/index.vue'
-import warranty from '../pages/warranty.vue'
+import warranty from '../pages/warranty/index.vue'
+import bill from '../pages/warranty/bill.vue'
 import products from '../pages/products/index.vue'
-import about from '../pages/about.vue'
 import productsInfo from '../pages/products/info.vue'
+import caseIndex from '../pages/case/index.vue'
+import caseInfo from '../pages/case/info.vue'
+import about from '../pages/about.vue'
+
 
 
 const router = createRouter({
@@ -40,6 +44,13 @@ const router = createRouter({
       path: '/warranty',
       name: 'warranty',
       component: warranty,
+      children: [
+        {
+          path: 'bill',
+          name: 'bill',
+          component: bill,
+        },
+      ],
     },
     {
       path: '/products',
@@ -53,6 +64,18 @@ const router = createRouter({
         },
       ],
 
+    },
+    {
+      path: '/case',
+      name: 'case',
+      component: caseIndex,
+      children: [
+        {
+          path: 'caseInfo',
+          name: 'caseInfo',
+          component: caseInfo,
+        },
+      ],
     },
     {
       path: '/about',
