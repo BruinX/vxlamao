@@ -16,6 +16,7 @@ export default defineConfig({
     AutoImport({
       imports: ['vue', 'vue-router'],
       resolvers: [ElementPlusResolver()],
+      dirs: ['src/api'],
       dts: 'src/auto-imports.d.ts',
       eslintrc: { enabled: true },
     }),
@@ -34,12 +35,12 @@ export default defineConfig({
     host: '0.0.0.0',
     port: 80,
   },
-  // resolve: {
-  //   alias: {
-  //     '~': path.resolve(__dirname, 'src'),
-  //     '@': path.resolve(__dirname, 'src'), // 顺手留一个
-  //   },
-  // },
+  resolve: {
+    alias: {
+      '~': path.resolve(__dirname, 'src'),
+      '@': path.resolve(__dirname, 'src'), // 顺手留一个
+    },
+  },
   // css: {
   //   preprocessorOptions: {
   //     scss: {

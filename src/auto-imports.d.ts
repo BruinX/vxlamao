@@ -7,6 +7,7 @@
 export {}
 declare global {
   const EffectScope: typeof import('vue').EffectScope
+  const ElLoading: typeof import('element-plus/es').ElLoading
   const ElMessage: typeof import('element-plus/es').ElMessage
   const ElNotification: typeof import('element-plus/es').ElNotification
   const computed: typeof import('vue').computed
@@ -15,9 +16,15 @@ declare global {
   const defineAsyncComponent: typeof import('vue').defineAsyncComponent
   const defineComponent: typeof import('vue').defineComponent
   const effectScope: typeof import('vue').effectScope
+  const getCateInfoWithCache: typeof import('./api/index.js').getCateInfoWithCache
+  const getCateList: typeof import('./api/index.js').getCateList
+  const getCateinfo: typeof import('./api/index.js').getCateinfo
   const getCurrentInstance: typeof import('vue').getCurrentInstance
   const getCurrentScope: typeof import('vue').getCurrentScope
   const getCurrentWatcher: typeof import('vue').getCurrentWatcher
+  const getProductCateList: typeof import('./api/index.js').getProductCateList
+  const getProductIndexApi: typeof import('./api/index.js').getProductIndexApi
+  const getProductInfoApi: typeof import('./api/index.js').getProductInfoApi
   const h: typeof import('vue').h
   const inject: typeof import('vue').inject
   const isProxy: typeof import('vue').isProxy

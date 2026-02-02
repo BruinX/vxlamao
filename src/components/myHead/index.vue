@@ -28,7 +28,7 @@
               {{ item.label }}
             </div>
             <ul tabindex="-1" class="dropdown-content menu bg-white/98 rounded-box z-1 w-64 p-2 shadow-sm">
-              <li v-for="liItem in globalPageData.common.product" :key="liItem.id"
+              <li v-for="liItem in productsCateList" :key="liItem.id"
                 class="text-sm font-semibold tracking-wide hover:text-orange-500 transition-colors select-none cursor-pointer text-theme"
                 :class="{ '!text-orange-500': productsId == liItem.id && $route.name === 'products' }" @click="
                   () => {
@@ -77,7 +77,7 @@
             <summary class="collapse-title font-semibold p-0"
               :class="{ 'text-orange-500': pagePath == item.path || $route.name === 'productsInfo' }">{{ item.label }}
             </summary>
-            <div v-for="liItem in globalPageData.common.product" :key="liItem.id"
+            <div v-for="liItem in productsCateList" :key="liItem.id"
               class="collapse-content ml-4 py-2 p-0 border-b border-orange-500"
               :class="{ '!text-orange-500': productsId == liItem.id && $route.name === 'products' }"
               @click.stop="goPath('/products', { id: liItem.id })">
@@ -91,7 +91,7 @@
 </template>
 
 <script setup>
-import { getPageData } from '../../util/globalUtil.js'
+import { getPageData, getCateInfoWithCache } from '../../util/globalUtil.js'
 const globalPageData = getPageData()
 const router = useRouter()
 const route = useRoute()
@@ -104,6 +104,7 @@ const headerRef = ref(null)
 const dropdownRef = ref([])
 
 const navs = globalPageData.common.headerNavs
+const productsCateList = ref([]);
 
 const handleScroll = () => {
   scrolled.value = window.scrollY > 100
@@ -137,10 +138,12 @@ const onClickOutside = (e) => {
   }
 }
 
-onMounted(() => {
+
+onMounted(async () => {
   window.addEventListener('scroll', handleScroll, { passive: true })
   document.addEventListener('click', handleClickOutside)
   document.addEventListener('click', onClickOutside)
+  productsCateList.value = await getCateInfoWithCache();
 })
 
 onUnmounted(() => {

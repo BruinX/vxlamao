@@ -59,7 +59,7 @@ export const getPageData = () => {
         { label: 'PRODUCTS', path: '/products' },
         { label: 'WARRANTY', path: '/warranty' },
         { label: 'CASE', path: '/case' },
-        { label: 'ABOUT US', path: '/about' },
+        // { label: 'ABOUT US', path: '/about' },
       ],
       product: [
         {
@@ -93,4 +93,42 @@ export const getPageData = () => {
       ],
     },
   }
+}
+
+
+/**
+ * 获取分类信息
+ */
+const CACHE_KEY = 'cateInfo';
+export async function getCateInfoWithCache() {
+  // 1️⃣ 读缓存
+  const cache = sessionStorage.getItem(CACHE_KEY);
+
+  if (cache) {
+    try {
+      return JSON.parse(cache);
+    } catch (e) {
+      // 缓存损坏，清掉
+      sessionStorage.removeItem(CACHE_KEY);
+    }
+  }
+
+  // 2️⃣ 没缓存，请求接口
+  const cateList = await getCateList();
+
+  const cate = await Promise.all(
+    cateList.map(async (item) => {
+      const detail = await getCateinfo({ id: item.id });
+
+      return {
+        ...item,
+        ...detail,
+      };
+    })
+  );
+
+  // 3️⃣ 写缓存
+  sessionStorage.setItem(CACHE_KEY, JSON.stringify(cate));
+
+  return cate;
 }

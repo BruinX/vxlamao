@@ -25,9 +25,10 @@
             height: item.imageHeight + 'px',
           }">
             <el-image :src="`${item.img}?w=600&q=75&format=webp`" :alt="item.id"
-              class="w-full h-full object-cover block" fit="cover" lazy><template #placeholder>
-                <div class="w-full text-2xl flex justify-center items-center">
-                  Loading
+              class="w-full h-full object-cover block" fit="cover" lazy>
+              <template #placeholder>
+                <div class="w-full text-2xl flex justify-center">
+                  <Loading />
                 </div>
               </template>
             </el-image>

@@ -28,9 +28,9 @@
     </div>
 
 
-    <div class="py-6 px-3 md:py-10 md:px-0 ">
+    <div class="py-6 px-3 md:py-10 md:px-0 min-h-screen  ">
       <template v-if="pageData.caseData.data?.length">
-        <Masonry :items="pageData.caseData.data" :duration="0.6" :stagger="0.15" animate-from="bottom"
+        <Masonry :items="pageData.caseData.data" :duration="0.6" :stagger="0.2" animate-from="bottom"
           :scale-on-hover="true" :hover-scale="0.95" :blur-to-focus="true" :color-shift-on-hover="false" />
 
         <!-- pagination -->
@@ -78,14 +78,14 @@ const items = ref([
   // { id: '9', img: 'https://www.vxlamao-films.com/images/product_view2.jpg', url: 'https://picsum.photos' },
   // { id: '10', img: 'https://www.vxlamao-films.com/images/9fHAKPCwnVQb8S0k.jpeg', url: 'https://picsum.photos' },
 
-  { id: '11', img: 'https://picsum.photos/300/360?random=11', url: 'https://picsum.photos' },
-  { id: '12', img: 'https://picsum.photos/300/520?random=12', url: 'https://picsum.photos' },
-  { id: '13', img: 'https://picsum.photos/300/390?random=13', url: 'https://picsum.photos' },
+  { id: '11', img: 'https://picsum.photos/3100/360?random=11', url: 'https://picsum.photos' },
+  { id: '12', img: 'https://picsum.photos/3200/5205?random=12', url: 'https://picsum.photos' },
+  { id: '13', img: 'https://picsum.photos/3300/3940?random=13', url: 'https://picsum.photos' },
   { id: '14', img: 'https://picsum.photos/300/580?random=14', url: 'https://picsum.photos' },
-  { id: '15', img: 'https://picsum.photos/300/340?random=15', url: 'https://picsum.photos' },
-  { id: '16', img: 'https://picsum.photos/300/630?random=16', url: 'https://picsum.photos' },
+  { id: '15', img: 'https://picsum.photos/3060/3450?random=15', url: 'https://picsum.photos' },
+  { id: '16', img: 'https://picsum.photos/3060/630?random=16', url: 'https://picsum.photos' },
   { id: '17', img: 'https://picsum.photos/300/410?random=17', url: 'https://picsum.photos' },
-  { id: '18', img: 'https://picsum.photos/300/560?random=18', url: 'https://picsum.photos' },
+  { id: '18', img: 'https://picsum.photos/3600/560?random=18', url: 'https://picsum.photos' },
   { id: '19', img: 'https://picsum.photos/300/370?random=19', url: 'https://picsum.photos' },
   { id: '20', img: 'https://picsum.photos/300/610?random=20', url: 'https://picsum.photos' }
 ]);
@@ -213,7 +213,7 @@ const mockGetCaseListAPI = queryData => {
 
   return new Promise(resolve => {
     setTimeout(() => {
-      resolve(mockResponse2);
+      resolve(mockResponse);
     }, 300); // 模拟网络延迟
   });
 };
