@@ -7,10 +7,9 @@
               <HomeFilled />
             </el-icon>
           </template></el-breadcrumb-item>
-        <el-breadcrumb-item :to="{
-          path: '/products',
-          query: { id: cateData.id }
-        }">{{ cateData.title }}</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ name: 'products', params: { cateId } }">
+          {{ cateData.title }}
+        </el-breadcrumb-item>
         <el-breadcrumb-item v-if="productInfo">{{ productInfo.name }}</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
@@ -54,12 +53,15 @@ const productsCateList = ref([]);
 const productInfo = ref({})
 
 
-// -------------------- computed --------------------
-const productId = computed(() => {
-  return route.query.productId
-    ? String(route.query.productId)
-    : '1'
+// ---------------- props ----------------
+const props = defineProps({
+  cateId: String,
+  productId: String,
 })
+
+
+// -------------------- computed --------------------
+const productId = computed(() => props.productId)
 
 const cateData = computed(() => {
   return productsCateList.value.find(
@@ -105,7 +107,6 @@ const navigate = async (path, query) => {
 watch(
   productId,
   () => {
-    if (route.name == 'products') return
     getProductInfo()
   },
   { immediate: true }

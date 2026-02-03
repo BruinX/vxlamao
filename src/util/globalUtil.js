@@ -97,38 +97,53 @@ export const getPageData = () => {
 
 
 /**
- * 获取分类信息
+ * 获取分类信息（带缓存 + 并发锁）
  */
-const CACHE_KEY = 'cateInfo';
-export async function getCateInfoWithCache() {
-  // 1️⃣ 读缓存
-  const cache = sessionStorage.getItem(CACHE_KEY);
+const CACHE_KEY = 'cateInfo'
 
+// ⚠️ 关键：内存中的请求锁
+let pendingPromise = null
+
+export async function getCateInfoWithCache() {
+  // 1️⃣ 优先读 sessionStorage
+  const cache = sessionStorage.getItem(CACHE_KEY)
   if (cache) {
     try {
-      return JSON.parse(cache);
-    } catch (e) {
-      // 缓存损坏，清掉
-      sessionStorage.removeItem(CACHE_KEY);
+      return JSON.parse(cache)
+    } catch {
+      sessionStorage.removeItem(CACHE_KEY)
     }
   }
 
-  // 2️⃣ 没缓存，请求接口
-  const cateList = await getCateList();
+  // 2️⃣ 如果已有请求在进行中，直接复用
+  if (pendingPromise) {
+    return pendingPromise
+  }
 
-  const cate = await Promise.all(
-    cateList.map(async (item) => {
-      const detail = await getCateinfo({ id: item.id });
+  // 3️⃣ 发起真实请求（并上锁）
+  pendingPromise = (async () => {
+    const cateList = await getCateList()
 
-      return {
-        ...item,
-        ...detail,
-      };
-    })
-  );
+    const cate = await Promise.all(
+      cateList.map(async (item) => {
+        const detail = await getCateinfo({ id: item.id })
+        return {
+          ...item,
+          ...detail,
+        }
+      })
+    )
 
-  // 3️⃣ 写缓存
-  sessionStorage.setItem(CACHE_KEY, JSON.stringify(cate));
+    // 写缓存
+    sessionStorage.setItem(CACHE_KEY, JSON.stringify(cate))
 
-  return cate;
+    return cate
+  })()
+
+  try {
+    return await pendingPromise
+  } finally {
+    // 4️⃣ 请求结束，释放锁
+    pendingPromise = null
+  }
 }

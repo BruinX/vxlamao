@@ -16,14 +16,15 @@
 
     <div class="card-base">
       <div class="mx-auto flex flex-wrap justify-between text-black">
-        <template v-for="itemData in pageData.list" :key="itemData.build_time">
-          <el-watermark class="w-full mt-3 mx-0 select-none" :content="pageData.watermarkConfig.content"
+        <template v-for="(itemData, index) in pageData.list" :key="itemData.build_time">
+          <el-watermark class="w-full mb-6 mx-0 select-none shadow-xl"
+            :class="{ '!mb-0': index == pageData.list.length - 1 }" :content="pageData.watermarkConfig.content"
             :offset="pageData.watermarkConfig.offset" :rotate="pageData.watermarkConfig.rotate">
-            <div class="text-base pb-6 flex justify-between items-center">
+            <div class="text-base py-6 px-3 flex justify-between items-center">
               <span
                 class="font-medium h-auto py-2.5 rounded-md mr-3 bg-indigo-400 text-white text-center border-2 border-indigo-400">
                 <span class="px-3 py-2 rounded-md bg-indigo-400 text-white text-center border-2 border-white">{{
-                  itemData?.car_number }}</span>
+                  itemData?.car_no }}</span>
               </span>
               <p class="flex justify-center items-center">
                 <span v-if="itemData.warrantyExpired" class="iconfont icon-dc-b-warranty-expired  text-green-500"
@@ -40,32 +41,35 @@
             <el-descriptions direction="vertical" :column="3" size="large" border>
               <el-descriptions-item label="Name">{{ itemData?.car_owner }}</el-descriptions-item>
               <el-descriptions-item label="Telephone">{{ itemData?.phone }}</el-descriptions-item>
-              <el-descriptions-item label="License Plate Number" :span="1">{{ itemData?.car_number
+              <el-descriptions-item label="License Plate Number" :span="1">{{ itemData?.car_no
               }}</el-descriptions-item>
               <el-descriptions-item label="Vehicle Model" :span="3">
                 <el-tag size="large">{{ itemData?.car_brand }}</el-tag>
-                <el-tag class="mx-3" size="large">{{ itemData?.car_mode }}</el-tag>
+                <el-tag class="mx-3" size="large">{{ itemData?.car_model }}</el-tag>
               </el-descriptions-item>
-              <el-descriptions-item label="VIN (Vehicle Identification Number)" :span="3">{{ itemData?.car_vin
-              }}</el-descriptions-item>
-              <el-descriptions-item label="Installation Shop" :span="pageData.screenWidth > 550 ? 1 : 3">{{
-                itemData?.build_shop
-              }}</el-descriptions-item>
-              <el-descriptions-item label="Delivery Date" :span="pageData.screenWidth > 550 ? 1 : 2">{{
-                itemData?.build_time
-              }}</el-descriptions-item>
-              <el-descriptions-item label="Warranty Period" :span="pageData.screenWidth > 550 ? 1 : 2">{{
-                itemData?.years + '-Year Warranty'
-              }}</el-descriptions-item>
-              <el-descriptions-item label="Product Model" :span="pageData.screenWidth > 550 ? 1 : 2">{{
-                itemData?.cate_name
-              }}</el-descriptions-item>
-              <el-descriptions-item label="Product Price" :span="pageData.screenWidth > 550 ? 1 : 2">{{ 'CNY ' +
-                itemData?.price
-              }}</el-descriptions-item>
-              <el-descriptions-item label="Remarks" :span="pageData.screenWidth > 550 ? 1 : 3">{{ itemData?.remark ||
-                '/'
-              }}</el-descriptions-item>
+              <el-descriptions-item label="VIN (Vehicle Identification Number)" :span="3">
+                {{ itemData?.car_vin }}
+              </el-descriptions-item>
+              <el-descriptions-item label="Installation Shop" :span="pageData.screenWidth > 550 ? 1 : 3">
+                {{ itemData?.bulid_address }}
+              </el-descriptions-item>
+              <el-descriptions-item label="Film number" :span="pageData.screenWidth > 550 ? 1 : 3">
+                {{ itemData?.film_no }}
+              </el-descriptions-item>
+              <el-descriptions-item label="Delivery Date" :span="pageData.screenWidth > 550 ? 1 : 2">
+                {{ itemData?.bulid_time }}
+              </el-descriptions-item>
+              <el-descriptions-item label="Warranty Period" :span="pageData.screenWidth > 550 ? 1 : 2">
+                {{ itemData?.period_year + '-Year Warranty' }}
+              </el-descriptions-item>
+              <el-descriptions-item label="Product Model" :span="pageData.screenWidth > 550 ? 1 : 2">
+                {{ itemData?.product.name }}
+              </el-descriptions-item>
+              <el-descriptions-item label="Product Price" :span="pageData.screenWidth > 550 ? 1 : 2">
+                {{ 'CNY ' + itemData?.price }}
+              </el-descriptions-item>
+              <el-descriptions-item label="Remarks" :span="pageData.screenWidth > 550 ? 1 : 3">
+                {{ itemData?.remark || '/' }}</el-descriptions-item>
             </el-descriptions>
           </el-watermark>
         </template>

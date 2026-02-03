@@ -25,6 +25,7 @@ declare global {
   const getProductCateList: typeof import('./api/index.js').getProductCateList
   const getProductIndexApi: typeof import('./api/index.js').getProductIndexApi
   const getProductInfoApi: typeof import('./api/index.js').getProductInfoApi
+  const getWarrantyQueryApi: typeof import('./api/index.js').getWarrantyQueryApi
   const h: typeof import('vue').h
   const inject: typeof import('vue').inject
   const isProxy: typeof import('vue').isProxy

@@ -33,6 +33,7 @@
     "getCurrentWatcher": true,
     "getProductIndexApi": true,
     "getProductInfoApi": true,
+    "getWarrantyQueryApi": true,
     "h": true,
     "inject": true,
     "isProxy": true,

@@ -1,2 +1,3 @@
-export const BASE_URL = 'http://sky.wjisc.com:8114/api';
+// export const BASE_URL = '/api';
+export const BASE_URL = 'https://www.vxlamao-films.com/api';
 export const TIMEOUT = 5000;

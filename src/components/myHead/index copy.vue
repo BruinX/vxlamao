@@ -32,14 +32,14 @@
                 :class="{
                   '!text-orange-500': productsId == liItem.id
                 }" @click="
-                  () => {
-                    router.push({
-                      name: 'products',
-                      params: { cateId: liItem.id },
-                    })
-                    openDropdown = false
-                  }
-                ">
+                () => {
+                  router.push({
+                    name: 'products',
+                    params: { cateId: liItem.id },
+                  })
+                  openDropdown = false
+                }
+              ">
                 <span>{{ liItem.title }}</span>
 
               </li>
@@ -78,19 +78,16 @@
             {{ item.label }}
           </div>
           <details v-else class="collapse" name="my-accordion-det-1">
-            <summary class="collapse-title font-semibold p-0" :class="{ 'text-orange-500': isInProducts }">{{ item.label
-            }}
+            <summary class="collapse-title font-semibold p-0"
+              :class="{ 'text-orange-500': pagePath == item.path || $route.name === 'productsInfo' }">{{ item.label }}
             </summary>
             <div v-for="liItem in productsCateList" :key="liItem.id"
               class="collapse-content ml-4 py-2 p-0 border-b border-orange-500" :class="{
                 '!text-orange-500': productsId == liItem.id
-              }" @click.stop="() => {
-                router.push({
-                  name: 'products',
-                  params: { cateId: liItem.id },
-                })
-                isOpen = false
-              }">
+              }" @click.stop="router.push({
+                name: 'products',
+                params: { cateId: liItem.id },
+              })">
               <p>{{ liItem.title }}</p>
             </div>
           </details>

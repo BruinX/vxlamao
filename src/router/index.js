@@ -1,89 +1,54 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import AOS from 'aos'
-import index from '../pages/index.vue'
-import warranty from '../pages/warranty/index.vue'
-import bill from '../pages/warranty/bill.vue'
-import products from '../pages/products/index.vue'
-import productsInfo from '../pages/products/info.vue'
-import caseIndex from '../pages/case/index.vue'
-import caseInfo from '../pages/case/info.vue'
-import about from '../pages/about.vue'
-
-
+const Index = () => import('../pages/index.vue')
+const WarrantyLayout = () => import('../pages/warranty/layout.vue')
+const WarrantyQuery = () => import('../pages/warranty/query.vue')
+const Bill = () => import('../pages/warranty/bill.vue')
+const Products = () => import('../pages/products/index.vue')
+const ProductsInfo = () => import('../pages/products/info.vue')
+const CaseIndex = () => import('../pages/case/index.vue')
+const CaseInfo = () => import('../pages/case/info.vue')
+const About = () => import('../pages/about.vue')
 
 const router = createRouter({
   history: createWebHistory(),
   scrollBehavior(to, from, savedPosition) {
-    // 浏览器前进 / 后退
-    if (savedPosition) {
-      return savedPosition
-    }
-
-    //只有 products 页面不需要平滑滚动
-    if (
-      to.name === 'products' &&
-      from.name === 'products'
-    ) {
-      return false
-    }
-
-    // 普通路由跳转
-    return {
-      top: 0,
-      left: 0,
-      behavior: 'smooth', // 可选：平滑滚动
-    }
+    if (savedPosition) return savedPosition
+    if (to.name === 'products' && from.name === 'products') return false
+    return { top: 0, behavior: 'smooth' }
   },
   routes: [
-    {
-      path: '/',
-      name: 'index',
-      component: index,
-    },
+    { path: '/', name: 'index', component: Index },
     {
       path: '/warranty',
-      name: 'warranty',
-      component: warranty,
+      component: WarrantyLayout,
       children: [
-        {
-          path: 'bill',
-          name: 'bill',
-          component: bill,
-        },
-      ],
+        { path: '', name: 'warranty', component: WarrantyQuery },
+        { path: 'bill', name: 'bill', component: Bill }],
     },
     {
-      path: '/products',
+      path: '/products/:cateId',
       name: 'products',
-      component: products,
+      component: Products,
       children: [
         {
-          path: 'productsInfo',
+          path: ':productId',
           name: 'productsInfo',
-          component: productsInfo,
+          component: ProductsInfo,
+          props: true,
         },
       ],
-
     },
     {
       path: '/case',
       name: 'case',
-      component: caseIndex,
-      children: [
-        {
-          path: 'caseInfo',
-          name: 'caseInfo',
-          component: caseInfo,
-        },
-      ],
+      component: CaseIndex,
+      children: [{ path: 'caseInfo', name: 'caseInfo', component: CaseInfo }],
     },
-    {
-      path: '/about',
-      name: 'about',
-      component: about,
-    },
+    { path: '/about', name: 'about', component: About },
   ],
 })
+
 
 router.afterEach(() => {
   AOS.refresh()

@@ -39,8 +39,8 @@
     </div>
     <el-row id="productList" class="tac container mx-auto py-5 lg:py-10">
       <div class="hidden-lg-and-up px-4 w-full">
-        <el-dropdown trigger="click" size="large" @command="handleCommand">
-          <el-button class=""> Products
+        <el-dropdown ref="dropdown1" trigger="click" size="large">
+          <el-button class=""> products
             <el-icon class="el-icon--circle">
               <arrow-down />
             </el-icon>
@@ -49,9 +49,10 @@
           <template #dropdown>
             <el-dropdown-menu class="product-dropdown">
               <el-dropdown-item :disabled="item.id == cateId" v-for="item in productsCateList" :key="item.id"
-                :command="String(item.id)">{{
-                  item.title
-                }}</el-dropdown-item>
+                :command="String(item.id)"> <router-link class="block w-full"
+                  :to="{ name: 'products', params: { cateId: item.id } }">
+                  {{ item.title }}
+                </router-link></el-dropdown-item>
             </el-dropdown-menu>
           </template>
         </el-dropdown>
@@ -60,25 +61,33 @@
 
       <el-col :span="0" :lg="5">
         <h5 class="mb-2 text-2xl">Products</h5>
-        <el-menu :default-active="cateId" class="select-none" @select="onMenuSelect">
+        <el-menu :default-active="cateId" class="select-none">
           <el-menu-item class="truncate" v-for="item in productsCateList" :key="item.id" :index="String(item.id)">
-            {{ item.title }}
+            <router-link class="block w-full" :to="{ name: 'products', params: { cateId: item.id } }">
+              {{ item.title }}
+            </router-link>
           </el-menu-item>
         </el-menu>
       </el-col>
       <el-col v-if="productList.length" :span="24" :lg="19"
         class="py-6 md:py-10 px-4 !grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <el-card v-for="item in productList" class=" cursor-pointer active:scale-95 transition-all duration-300"
-          shadow="hover" style="--el-card-padding: 10px"
-          @click="navigate('/products/productsInfo', { productId: item.id })">
-          <img :src="item.cover || '/images/default_product.jpg'" class="w-full " />
-          <template #footer>
-            <div class="">
-              <p class="font-bold">{{ item.title }}</p>
-              <p class="text-gray-500 text-sm">No.{{ item.id }}</p>
-            </div>
-          </template>
-        </el-card>
+        <router-link v-for="item in productList" :key="item.id" class="block" :to="{
+          name: 'productsInfo',
+          params: { cateId, productId: item.id },
+        }">
+
+          <el-card class=" cursor-pointer active:scale-95 transition-all duration-300" shadow="hover"
+            style="--el-card-padding: 10px">
+            <img :src="item.cover || '/images/default_product.jpg'" class="w-full " />
+            <template #footer>
+              <div class="">
+                <p class="font-bold">{{ item.title }}</p>
+                <p class="text-gray-500 text-sm">No.{{ item.id }}</p>
+              </div>
+            </template>
+          </el-card>
+        </router-link>
+
       </el-col>
       <el-empty v-else class="mx-auto my-5" description="No data at present." />
 
@@ -101,6 +110,7 @@ import { useCounterStore } from '../../stores/counter.js'
 import 'element-plus/theme-chalk/display.css'
 const router = useRouter()
 const route = useRoute()
+const dropdown1 = ref()
 
 // -------------------- state --------------------
 const productsCateList = ref([]);
@@ -113,32 +123,32 @@ const pageData = reactive({
   pageSize: 10,
 });
 
+// ---------------- props ----------------
+// const props = defineProps({
+//   cateId: {
+//     type: String,
+//     required: true,
+//   },
+// })
+
 // -------------------- computed --------------------
+
+// 获取当前路由的id
+const cateId = computed(() => route.params.cateId)
+
 const productInfo = computed(() => {
   return productsCateList.value.find(
     item => item.id == cateId.value
   ) || {}
 })
 
-// 获取当前路由的id
-const cateId = computed(() => {
-  return route.query.id
-    ? String(route.query.id)
-    : productsCateList.value[0]?.id
-})
+
 
 // -------------------- 事件处理 --------------------
 const handleCurrentChange = val => {
   pageData.currentPage = val;
 };
 
-const handleCommand = (command) => {
-  navigate('/products', { id: command })
-}
-const onMenuSelect = (index) => {
-  // index === el-menu-item 的 index
-  navigate('/products', { id: index })
-}
 
 // -------------------- 路由跳转 --------------------
 const navigate = async (path, query) => {
@@ -174,15 +184,16 @@ const getProductList = async () => {
   } finally {
     // 请求完成或异常都关闭 loading
     loading.close()
+    dropdown1.value.handleClose()
   }
 }
 
 
 // -------------------- watch --------------------
+
 watch(
   cateId,
   () => {
-    if (route.name == 'productsInfo') return
     pageData.currentPage = 1
     getProductList()
   },
@@ -198,6 +209,7 @@ watch(
 
 // -------------------- 初始化 --------------------
 onMounted(async () => {
+  console.log('route.name', route);
   productsCateList.value = await getCateInfoWithCache()
 })
 

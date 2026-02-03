@@ -34,12 +34,11 @@ export const getProductInfoApi = (params) =>
     });
 
 
-// /** 案例列表 */
-// export const getCaseList = ({ page, cate_id }) =>
-//     http('/goods/getCaseList', {
-//         method: 'GET',
-//         params: {
-//             page,
-//             cate_id,
-//         },
-//     });
+
+/** 质保查询 */
+export const getWarrantyQueryApi = (params) =>
+    http('/car-film/v1/warranty/query', {
+        method: 'GET',
+        params,
+    });
+
