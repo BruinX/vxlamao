@@ -50,8 +50,9 @@
               <el-descriptions-item label="VIN (Vehicle Identification Number)" :span="3">
                 {{ itemData?.car_vin }}
               </el-descriptions-item>
-              <el-descriptions-item label="Installation Shop" :span="pageData.screenWidth > 550 ? 1 : 3">
-                {{ itemData?.bulid_address }}
+              <el-descriptions-item class-name="!text-sm" label="Installation Shop"
+                :span="pageData.screenWidth > 550 ? 1 : 3">
+                {{ itemData?.dealer.name + ' - ' + itemData?.bulid_address }}
               </el-descriptions-item>
               <el-descriptions-item label="Film number" :span="pageData.screenWidth > 550 ? 1 : 3">
                 {{ itemData?.film_no }}
@@ -63,7 +64,7 @@
                 {{ itemData?.period_year + '-Year Warranty' }}
               </el-descriptions-item>
               <el-descriptions-item label="Product Model" :span="pageData.screenWidth > 550 ? 1 : 2">
-                {{ itemData?.product.name }}
+                {{ cateData(itemData.product.cate_id)?.title + ' - ' + itemData?.product.name }}
               </el-descriptions-item>
               <el-descriptions-item label="Product Price" :span="pageData.screenWidth > 550 ? 1 : 2">
                 {{ 'CNY ' + itemData?.price }}
@@ -84,8 +85,11 @@
 </template>
 
 <script setup>
+import { getCateInfoWithCache } from '../../util/globalUtil.js'
+
 const router = useRouter()
 const route = useRoute()
+const productsCateList = ref([]);
 
 const pageData = reactive({
   list: [],
@@ -96,6 +100,13 @@ const pageData = reactive({
     offset: [0, 90]
   }
 });
+
+const cateData = (cate_id) => {
+  return productsCateList.value.find(
+    item => item.id == cate_id
+  ) || {}
+}
+
 const handleResize = () => {
   pageData.screenWidth = window.innerWidth;
 };
@@ -105,7 +116,8 @@ const navigate = (path, query) => {
   router.push(query ? { path, query } : { path })
 }
 
-onMounted(() => {
+onMounted(async () => {
+  productsCateList.value = await getCateInfoWithCache()
   window.addEventListener('resize', handleResize);
   // 计算当前时间
   // 从SessionStorage读取数据

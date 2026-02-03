@@ -111,6 +111,11 @@ const fetchGuaranteeSlip = async () => {
     )
     // 🚀 跳转到账单 / 质保单页面
     router.push({ name: 'bill' })
+    ElMessage({
+      message: 'Query succeeded.',
+      grouping: true,
+      type: 'success',
+    })
   } catch (error) {
     console.error('[fetchGuaranteeSlip]', error)
     ElNotification({

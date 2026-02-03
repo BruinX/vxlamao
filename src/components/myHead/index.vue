@@ -10,7 +10,7 @@
       </div>
 
       <!-- 中间导航 (PC) -->
-      <nav class="hidden md:flex items-center gap-6 flex-1 ml-10">
+      <nav class="hidden md:flex items-center gap-6 flex-1 ml-10 ">
         <template v-for="item in navs" :key="item.path">
           <div v-if="item.label !== 'PRODUCTS'"
             class="text-sm font-semibold tracking-wide hover:text-orange-500 transition-colors select-none cursor-pointer"
@@ -69,7 +69,7 @@
     </div>
 
     <!-- 移动端菜单 -->
-    <div class="md:hidden absolute top-full left-0 w-full bg-neutral-800 duration-300"
+    <div class="md:hidden absolute top-full left-0 w-full bg-neutral-800 duration-300 cursor-pointer"
       :class="{ ' h-80 ': isOpen, 'h-0 overflow-hidden ': !isOpen }" @click.stop>
       <nav class="flex flex-col p-4 gap-3">
         <template v-for="item in navs" :key="item.path">
