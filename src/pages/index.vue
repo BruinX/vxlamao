@@ -14,7 +14,6 @@
         </BlurReveal>
       </div>
     </div>
-
     <div class="relative text-white">
       <img class="w-full h-[400px] md:h-screen object-cover z-0" :src="`/images/index_warranty_bg.jpg`"
         alt="idnex_warranty_bg" />
@@ -46,19 +45,19 @@
     </div>
 
     <div class="mx-auto grid grid-cols-1 md:grid-cols-2">
-      <div v-for="item in globalPageData.common.product" :key="item.imaPath"
+      <div v-for="item in pageStore.productsCateList" :key="item.id"
         class="w-full h-[35vh] md:h-[48vh] bg-gray-100 relative" data-aos="fade-up">
-        <img :src="`/images/${item.imaPath}`" alt="Mask_group" loading="lazy" class="w-full h-full object-cover" />
+        <img :src="item.cover" alt="Mask_group" loading="lazy" class="w-full h-full object-cover" />
         <div class="banner_title !top-1/8 flex justify-center items-center flex-wrap select-none" data-aos="fade-up"
           data-aos-delay="300">
           <p class="text-xl sm:text-2xl md:text-4xl lg:text-5xl w-full text-center" :class="` text-${item.color}`">
             {{ item.title }}
           </p>
-          <div
+          <router-link
             class="mt-3 py-2 px-4 rounded-full border text-center cursor-pointer bg-white/25 duration-300 active:bg-white active:text-black xl:hover:bg-white xl:hover:text-black"
-            :class="` text-${item.color} border-${item.color}`" @click="goPath('/products', { id: item.id })">
+            :class="` text-${item.color} border-${item.color}`" :to="{ name: 'products', params: { cateId: item.id } }">
             View more
-          </div>
+          </router-link>
         </div>
       </div>
     </div>
@@ -66,7 +65,9 @@
 </template>
 
 <script setup>
+import { useCounterStore } from '../stores/counter.js'
 import { getPageData } from '../util/globalUtil.js'
+const pageStore = useCounterStore()
 const router = useRouter()
 
 const pageData = reactive({
@@ -96,10 +97,7 @@ const goPath = (path, query) => {
 onMounted(async () => {
   calcHeight()
   window.addEventListener('resize', calcHeight)
-  console.log('index');
-
-  cateList.value = await getCateList();
-  console.log('getProductCateList', cateList.value);
+  console.log('pageStore.productsCateList', pageStore.productsCateList);
 })
 </script>
 

@@ -77,7 +77,7 @@
             :class="{ 'text-orange-500': pagePath == item.path }" @click="goPath(item.path)">
             {{ item.label }}
           </div>
-          <details v-else class="collapse" name="my-accordion-det-1">
+          <details v-else class="collapse rounded-none" name="my-accordion-det-1">
             <summary class="collapse-title font-semibold p-0" :class="{ 'text-orange-500': isInProducts }">{{ item.label
             }}
             </summary>

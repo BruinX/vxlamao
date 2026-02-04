@@ -3,6 +3,7 @@ import { defineStore } from 'pinia'
 
 export const useCounterStore = defineStore('counter', () => {
   const pageLoading = ref(false)
+  const productsCateList = ref([])
   function setPageLoading(val) {
     if (val) {
       document.body.style.overflow = 'hidden';
@@ -10,8 +11,11 @@ export const useCounterStore = defineStore('counter', () => {
       document.body.style.overflow = '';
     }
     pageLoading.value = val
-
   }
 
-  return { pageLoading, setPageLoading }
+  function setProductsCateList(val) {
+    productsCateList.value = val
+  }
+
+  return { pageLoading, productsCateList, setPageLoading, setProductsCateList }
 })

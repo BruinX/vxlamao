@@ -12,8 +12,13 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    2: typeof import('./components/masonry/index copy 2.vue')['default']
+    3: typeof import('./components/masonry/index copy 3.vue')['default']
+    4: typeof import('./components/masonry/index copy 4.vue')['default']
+    5: typeof import('./components/masonry/index copy 5.vue')['default']
     BlurReveal: typeof import('./components/blurReveal/index.vue')['default']
     BoxReveal: typeof import('./components/boxReveal/index.vue')['default']
+    copy: typeof import('./components/masonry/index copy.vue')['default']
     ElBacktop: typeof import('element-plus/es')['ElBacktop']
     ElBreadcrumb: typeof import('element-plus/es')['ElBreadcrumb']
     ElBreadcrumbItem: typeof import('element-plus/es')['ElBreadcrumbItem']
@@ -55,8 +60,13 @@ declare module 'vue' {
 
 // For TSX support
 declare global {
+  const 2: typeof import('./components/masonry/index copy 2.vue')['default']
+  const 3: typeof import('./components/masonry/index copy 3.vue')['default']
+  const 4: typeof import('./components/masonry/index copy 4.vue')['default']
+  const 5: typeof import('./components/masonry/index copy 5.vue')['default']
   const BlurReveal: typeof import('./components/blurReveal/index.vue')['default']
   const BoxReveal: typeof import('./components/boxReveal/index.vue')['default']
+  const copy: typeof import('./components/masonry/index copy.vue')['default']
   const ElBacktop: typeof import('element-plus/es')['ElBacktop']
   const ElBreadcrumb: typeof import('element-plus/es')['ElBreadcrumb']
   const ElBreadcrumbItem: typeof import('element-plus/es')['ElBreadcrumbItem']

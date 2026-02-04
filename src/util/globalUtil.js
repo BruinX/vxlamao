@@ -1,3 +1,5 @@
+import { useCounterStore } from '../stores/counter.js'
+
 const ruleList = {
   CertNumber:
     /^[1-9]\d{5}(18|19|([23]\d))\d{2}((0[1-9])|(10|11|12))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/, // 身份证
@@ -97,53 +99,60 @@ export const getPageData = () => {
 
 
 /**
- * 获取分类信息（带缓存 + 并发锁）
+ * 获取分类信息（缓存 + 并发锁 · 生产级）
  */
 const CACHE_KEY = 'cateInfo'
-
-// ⚠️ 关键：内存中的请求锁
 let pendingPromise = null
 
 export async function getCateInfoWithCache() {
-  // 1️⃣ 优先读 sessionStorage
+  const pageStore = useCounterStore()
+
+  // 1️⃣ 读缓存
   const cache = sessionStorage.getItem(CACHE_KEY)
   if (cache) {
     try {
-      return JSON.parse(cache)
+      const parsed = JSON.parse(cache)
+      pageStore.setProductsCateList(parsed)
+      return parsed
     } catch {
       sessionStorage.removeItem(CACHE_KEY)
     }
   }
 
-  // 2️⃣ 如果已有请求在进行中，直接复用
+  // 2️⃣ 并发复用
   if (pendingPromise) {
     return pendingPromise
   }
 
-  // 3️⃣ 发起真实请求（并上锁）
+  // 3️⃣ 发起真实请求（上锁）
   pendingPromise = (async () => {
-    const cateList = await getCateList()
+    try {
+      const cateList = await getCateList()
 
-    const cate = await Promise.all(
-      cateList.map(async (item) => {
-        const detail = await getCateinfo({ id: item.id })
-        return {
-          ...item,
-          ...detail,
-        }
-      })
-    )
+      const cate = await Promise.all(
+        cateList.map(async (item) => {
+          const detail = await getCateinfo({ id: item.id })
+          return {
+            ...item,
+            ...detail,
+          }
+        })
+      )
 
-    // 写缓存
-    sessionStorage.setItem(CACHE_KEY, JSON.stringify(cate))
+      sessionStorage.setItem(CACHE_KEY, JSON.stringify(cate))
+      pageStore.setProductsCateList(cate)
+      return cate
 
-    return cate
+    } catch (err) {
+      // ❗ 出错时清理缓存 & 状态
+      sessionStorage.removeItem(CACHE_KEY)
+      console.error('[getCateInfoWithCache]', err)
+      return []
+    } finally {
+      // 4️⃣ 无论成功失败，都释放锁
+      pendingPromise = null
+    }
   })()
 
-  try {
-    return await pendingPromise
-  } finally {
-    // 4️⃣ 请求结束，释放锁
-    pendingPromise = null
-  }
+  return pendingPromise
 }
