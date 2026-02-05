@@ -1,6 +1,6 @@
 <template>
-  <div class="container mx-auto pt-16 md:pt-20 ">
-    <div class="card-base h-16 flex justify-start  items-center">
+  <div class="container mx-auto pt-16 md:pt-20">
+    <div class="card-base h-16 flex justify-start items-center">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item :to="{ path: '/' }"><template #default>
             <el-icon size="16">
@@ -14,7 +14,7 @@
       </el-breadcrumb>
     </div>
 
-    <div class="card-base">
+    <div class="card-base ">
       <div class="mx-auto flex flex-wrap justify-between text-black">
         <template v-for="(itemData, index) in pageData.list" :key="itemData.build_time">
           <el-watermark class="w-full mb-6 mx-0 select-none shadow-xl"
@@ -69,8 +69,16 @@
               <el-descriptions-item label="Product Price" :span="pageData.screenWidth > 550 ? 1 : 2">
                 {{ 'CNY ' + itemData?.price }}
               </el-descriptions-item>
-              <el-descriptions-item label="Remarks" :span="pageData.screenWidth > 550 ? 1 : 3">
+              <el-descriptions-item label="Remarks" :span="3">
                 {{ itemData?.remark || '/' }}</el-descriptions-item>
+              <el-descriptions-item label="Installation Photo" :span="3">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4" v-if="itemData.build_images">
+                  <el-image v-for="(imageItem, imageIndex) in itemData.build_images" class="rounded-xl w-full "
+                    :src="imageItem" fit="cover" :preview-src-list="itemData.build_images" :initial-index="imageIndex"
+                    show-progress @click="onCopy(imageItem, imageIndex)" />
+                </div>
+                <el-empty v-else class="mx-auto" :image-size="100" description="No data at present." />
+              </el-descriptions-item>
             </el-descriptions>
           </el-watermark>
         </template>
@@ -116,6 +124,11 @@ const navigate = (path, query) => {
   router.push(query ? { path, query } : { path })
 }
 
+const onCopy = (image, index) => {
+  console.log('image', image, index);
+
+}
+
 onMounted(async () => {
   productsCateList.value = await getCateInfoWithCache()
   window.addEventListener('resize', handleResize);
@@ -124,6 +137,9 @@ onMounted(async () => {
   let storageData = JSON.parse(sessionStorage.getItem('guaranteeSlip'));
   if (storageData) {
     storageData.forEach(item => {
+      if (item.build_images) {
+        item.build_images = JSON.parse(item.build_images);
+      }
       if (isWarrantyExpired(item.build_time, item.years)) {
         item['warrantyExpired'] = false;
       } else {

@@ -41,9 +41,21 @@ const router = createRouter({
     },
     {
       path: '/case',
+      redirect: '/case/1'
+    },
+    {
+      path: '/case/:page',
       name: 'case',
       component: CaseIndex,
-      children: [{ path: 'caseInfo', name: 'caseInfo', component: CaseInfo }],
+      children: [
+        {
+          path: ':caseId',
+          name: 'caseInfo',
+          component: CaseInfo,
+          props: true,
+
+        }
+      ],
     },
     { path: '/about', name: 'about', component: About },
   ],

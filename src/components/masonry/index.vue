@@ -2,21 +2,21 @@
   <div ref="containerRef" class="relative w-full transition-[height] duration-300"
     :style="{ height: containerHeight + 'px' }">
     <template v-if="layoutReady">
-      <div v-for="item in grid" :key="item.id" :data-key="item.id" class="absolute box-content cursor-pointer" :style="{
+      <div v-for="item in grid" :key="item.id" :data-key="item.id" class="absolute box-content cursor-pointer " :style="{
         willChange: 'transform, width, height, opacity'
       }" @mouseenter="e => handleMouseEnter(item.id, e.currentTarget as HTMLElement)"
         @mouseleave="e => handleMouseLeave(item.id, e.currentTarget as HTMLElement)" @click="handleClick(item)">
         <!-- Card -->
         <div class="relative w-full h-full bg-white rounded-xl overflow-hidden
                shadow-[0_8px_30px_rgba(0,0,0,0.12)]
-               flex flex-col uppercase  ">
+               flex flex-col ">
           <!-- Header -->
-          <div class="px-3 pt-3 pb-2">
-            <div class="text-sm font-medium text-gray-900 line-clamp-1">
-              {{ item.title }}
+          <div class="px-3 pt-3 pb-2 w-full">
+            <div class="w-full text-sm font-medium text-gray-900 line-clamp-2">
+              <span>{{ item.cate_title + ' - ' + item.name }}</span>
             </div>
             <div class="text-xs text-gray-500 mt-0.5">
-              {{ item.car_brand + ' ' + item.car_mode }}
+              {{ item.car_brand + ' - ' + item.car_model }}
             </div>
           </div>
 
@@ -24,7 +24,7 @@
           <div class="w-full bg-cover bg-center" :style="{
             height: item.imageHeight + 'px',
           }">
-            <el-image :src="`${item.img}?w=600&q=75&format=webp`" :alt="item.id"
+            <el-image :src="`${item.cover}?w=600&q=75&format=webp`" :alt="item.id"
               class="w-full h-full object-cover block" fit="cover" lazy>
               <template #placeholder>
                 <div class="w-full text-2xl flex justify-center">
@@ -35,8 +35,8 @@
           </div>
 
           <!-- Footer -->
-          <div class="px-3 py-1 text-xs text-gray-400 border-t">
-            {{ item.date }}
+          <div class="absolute bottom-1  px-3 text-xs text-gray-400 ">
+            Date:{{ dayjs(item.bulid_time).format('YYYY-MM-DD') }}
           </div>
         </div>
       </div>
@@ -45,6 +45,7 @@
 </template>
 
 <script setup lang="ts">
+import dayjs from 'dayjs'
 import { ref, computed, onMounted, onUnmounted, watchEffect, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
 import { gsap } from 'gsap'
@@ -55,11 +56,13 @@ const pageStore = useCounterStore()
 
 interface MasonryItem {
   id: string
-  caseId: number
-  img: string
+  name: number
+  cover: string
   title: string
-  subTitle: string
-  date: string
+  cate_title: string
+  bulid_time: string
+  car_brand: string
+  car_model: string
 }
 
 const props = withDefaults(
@@ -153,7 +156,7 @@ const preloadImages = async () => {
     props.items.map(item => {
       return new Promise<void>(resolve => {
         const img = new Image()
-        img.src = item.img
+        img.src = item.cover
         img.onload = () => {
           ratioMap.value[item.id] =
             img.naturalHeight / img.naturalWidth
@@ -185,7 +188,7 @@ const grid = computed(() => {
 
       const imageHeight = colWidth * ratio
       const totalHeight =
-        HEADER_HEIGHT + imageHeight + FOOTER_HEIGHT
+        HEADER_HEIGHT + imageHeight + FOOTER_HEIGHT + 20
 
       const col = colHeights.indexOf(Math.min(...colHeights))
       const x = col * (colWidth + props.gap)
@@ -214,7 +217,7 @@ const containerHeight = computed(() => {
 
   let max = 0;
   grid.value.forEach(item => {
-    max = Math.max(max, item.y + item.h);
+    max = Math.max(max, item.y + item.h + 20);
   });
 
   return max;
@@ -251,13 +254,14 @@ interface GridItem extends MasonryItem {
 }
 const getInitialPosition = (item: GridItem) => {
   const containerRect = containerRef.value?.getBoundingClientRect();
-  if (!containerRect) return { x: item.x, y: item.y };
+  if (!containerRect) return { x: item.x, y: item.y + 20 };
 
   let direction = props.animateFrom;
   if (props.animateFrom === 'random') {
     const dirs = ['top', 'bottom', 'left', 'right'];
     direction = dirs[Math.floor(Math.random() * dirs.length)] as typeof props.animateFrom;
   }
+  return { x: item.x, y: item.y + 100 };
 
   switch (direction) {
     case 'top':
@@ -288,32 +292,33 @@ watch(
     nextTick(() => {
       currentGrid.forEach((item, index) => {
         const selector = `[data-key="${item.id}"]`;
-        const animProps = { x: item.x, y: item.y, width: item.w, height: item.h };
+        const animProps = { x: item.x, y: item.y + 20, width: item.w, height: item.h };
 
         if (!hasAnimated.value) {
           const start = getInitialPosition(item);
+          const startY = item.y + 20 + 60; // 20 是高度补偿，60 是动画偏移
           gsap.fromTo(
             selector,
             {
               opacity: 0,
               x: start.x,
-              y: start.y,
+              y: startY,
               ...(props.blurToFocus && { filter: 'blur(10px)' })
             },
             {
               opacity: 1,
               ...animProps,
               ...(props.blurToFocus && { filter: 'blur(0px)' }),
-              duration: 0.8,
-              ease: 'power3.out',
-              delay: index * props.stagger
+              // duration: 0.8,
+              // ease: 'power3.out',
+              // delay: index * props.stagger
             }
           );
         } else {
           gsap.to(selector, {
             ...animProps,
-            duration: props.duration,
-            ease: 'power3.out',
+            // duration: props.duration,
+            // ease: 'power3.out',
             overwrite: 'auto'
           });
         }

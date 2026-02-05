@@ -25,6 +25,8 @@
     "defineAsyncComponent": true,
     "defineComponent": true,
     "effectScope": true,
+    "getCaseIndexApi": true,
+    "getCaseInfoApi": true,
     "getCateList": true,
     "getCateinfo": true,
     "getCurrentInstance": true,

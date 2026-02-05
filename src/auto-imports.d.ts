@@ -16,6 +16,8 @@ declare global {
   const defineAsyncComponent: typeof import('vue').defineAsyncComponent
   const defineComponent: typeof import('vue').defineComponent
   const effectScope: typeof import('vue').effectScope
+  const getCaseIndexApi: typeof import('./api/index.js').getCaseIndexApi
+  const getCaseInfoApi: typeof import('./api/index.js').getCaseInfoApi
   const getCateInfoWithCache: typeof import('./api/index.js').getCateInfoWithCache
   const getCateList: typeof import('./api/index.js').getCateList
   const getCateinfo: typeof import('./api/index.js').getCateinfo
