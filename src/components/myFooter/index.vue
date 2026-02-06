@@ -26,19 +26,33 @@
       <div class="h-40 pt-6 md:pt-0 hidden md:block">
         <h2 class="font-bold pb-6">PRODUCTS</h2>
         <p class="text-sm text-white/70 pb-3 duration-75 active:text-white xl:hover:text-white select-none"
-          v-for="item in globalPageData.common.product" :key="item.title">
+          v-for="item in productsCateList" :key="item.id" @click.stop="() => {
+            router.push({
+              name: 'products',
+              params: { cateId: item.id },
+            })
+          }">
           {{ item.title }}
         </p>
       </div>
       <div class="h-40 pt-6 md:pt-0 text-center hidden md:block">
         <h2 class="font-bold pb-6">WARRANTY</h2>
-        <p class="text-sm text-white/70 pb-3 duration-75 active:text-white xl:hover:text-white select-none">
+        <p class="text-sm text-white/70 pb-3 duration-75 active:text-white xl:hover:text-white select-none" @click="() => {
+          router.push({
+            name: 'warranty',
+          })
+        }">
           Warranty Query
         </p>
       </div>
       <div class="h-40 pt-6 md:pt-0 text-center hidden md:block">
         <h2 class="font-bold pb-6">CASE</h2>
-        <p class="text-sm text-white/70 pb-3 duration-75 active:text-white xl:hover:text-white select-none">
+        <p class="text-sm text-white/70 pb-3 duration-75 active:text-white xl:hover:text-white select-none" @click="() => {
+          router.push({
+            name: 'case',
+            params: { page: 1 },
+          })
+        }">
           Case
         </p>
       </div>
@@ -52,20 +66,13 @@
 
 <script setup lang="ts">
 import dayjs from 'dayjs'
-import { getPageData } from '../../util/globalUtil.js'
+import { getPageData, getCateInfoWithCache } from '../../util/globalUtil.js'
 const globalPageData = getPageData()
 
+const productsCateList = ref([]);
 const router = useRouter()
 
-
-const goProduct = (path, query) => {
-  if (path) {
-    router.push({
-      path: `/${path}`,
-      query: {
-        _id: query,
-      },
-    })
-  }
-}
+onMounted(async () => {
+  productsCateList.value = await getCateInfoWithCache();
+})
 </script>

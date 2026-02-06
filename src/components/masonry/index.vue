@@ -8,14 +8,15 @@
         @mouseleave="e => handleMouseLeave(item.id, e.currentTarget as HTMLElement)" @click="handleClick(item)">
         <!-- Card -->
         <div class="relative w-full h-full bg-white rounded-xl overflow-hidden
-               shadow-[0_8px_30px_rgba(0,0,0,0.12)]
+               shadow-[0_4px_10px_rgba(0,0,0,0.12)]
                flex flex-col ">
           <!-- Header -->
           <div class="px-3 pt-3 pb-2 w-full">
             <div class="w-full text-sm font-medium text-gray-900 line-clamp-2">
-              <span>{{ item.cate_title + ' - ' + item.name }}</span>
+              <span v-if="masonryType == 'case'">{{ item.cate_title + ' - ' + item.name }}</span>
+              <span v-else>{{ item.name }}</span>
             </div>
-            <div class="text-xs text-gray-500 mt-0.5">
+            <div v-if="masonryType == 'case'" class="text-xs text-gray-500 mt-0.5">
               {{ item.car_brand + ' - ' + item.car_model }}
             </div>
           </div>
@@ -36,7 +37,8 @@
 
           <!-- Footer -->
           <div class="absolute bottom-1  px-3 text-xs text-gray-400 ">
-            Date:{{ dayjs(item.bulid_time).format('YYYY-MM-DD') }}
+            <span v-if="masonryType == 'case'">Date:{{ dayjs(item.bulid_time).format('YYYY-MM-DD') }}</span>
+            <span v-else>No.{{ item.id }}</span>
           </div>
         </div>
       </div>
@@ -68,6 +70,7 @@ interface MasonryItem {
 const props = withDefaults(
   defineProps<{
     items: MasonryItem[]
+    masonryType: string
     gap?: number
     duration?: number
     stagger?: number
@@ -76,7 +79,7 @@ const props = withDefaults(
     hoverScale?: number;
     blurToFocus?: boolean;
     colorShiftOnHover?: boolean;
-
+    casePage?: any
   }>(),
   {
     gap: 16,
@@ -86,7 +89,8 @@ const props = withDefaults(
     blurToFocus: true,
     colorShiftOnHover: false,
     stagger: 0.05,
-    animateFrom: 'bottom'
+    animateFrom: 'bottom',
+    masonryType: ''
   }
 )
 
@@ -99,13 +103,23 @@ const FOOTER_HEIGHT = 32
 
 const router = useRouter()
 
-const handleClick = (item: any) => {
-  const { href } = router.resolve({
-    path: '/case/caseInfo',
-    query: { id: item.id }
-  });
+const routeMap = {
+  case: (item: any) => ({
+    name: 'caseInfo',
+    params: { page: props.casePage, caseId: item.id },
+  }),
+  product: (item: any) => ({
+    name: 'productsInfo',
+    params: { cateId: item.cate_id, productId: item.id },
+  }),
+}
 
-  window.open(href, '_blank');
+const handleClick = (item: any) => {
+  const resolver = routeMap[props.masonryType]
+  if (!resolver) return
+
+  const { href } = router.resolve(resolver(item))
+  window.open(href, '_blank', 'noopener,noreferrer')
 }
 
 /* ================== responsive columns ================== */
@@ -188,7 +202,7 @@ const grid = computed(() => {
 
       const imageHeight = colWidth * ratio
       const totalHeight =
-        HEADER_HEIGHT + imageHeight + FOOTER_HEIGHT + 20
+        HEADER_HEIGHT + imageHeight + FOOTER_HEIGHT + (props.masonryType == 'case' ? 20 : -20)
 
       const col = colHeights.indexOf(Math.min(...colHeights))
       const x = col * (colWidth + props.gap)

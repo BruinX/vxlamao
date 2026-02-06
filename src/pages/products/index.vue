@@ -69,27 +69,39 @@
           </el-menu-item>
         </el-menu>
       </el-col>
-      <el-col v-if="productList.length" :span="24" :lg="19"
-        class="py-6 md:py-10 px-4 !grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <router-link v-for="item in productList" :key="item.id" class="block" :to="{
-          name: 'productsInfo',
-          params: { cateId, productId: item.id },
-        }">
+      <el-col :span="24" :lg="19">
+        <div class="flex justify-start items-center flex-nowrap px-3 pt-4 ">
+          <el-input class="w-full pr-3" v-model="pageData.keyword" placeholder="Please enter the product name" clearable
+            @keyup.enter="onSearch('keyword')" />
+          <el-button class="pr-3" @click="onReset">Reset</el-button>
+          <el-button type="primary" @click="onSearch">Search</el-button>
 
-          <el-card class=" cursor-pointer active:scale-95 transition-all duration-300" shadow="hover"
-            style="--el-card-padding: 10px">
-            <img :src="item.cover || '/images/default_product.jpg'" class="w-full " />
-            <template #footer>
-              <div class="">
+        </div>
+        <div v-if="productList.length" class="py-4  px-4 ">
+          <Masonry :items="productList" :duration="0.6" :stagger="0.2" animate-from="bottom" :scale-on-hover="true"
+            :hover-scale="0.95" :blur-to-focus="true" :color-shift-on-hover="false" :masonry-type="'product'" />
+          <!-- <router-link v-for="item in productList" :key="item.id" class="block" :to="{
+            name: 'productsInfo',
+            params: { cateId, productId: item.id },
+          }">
+            <el-card class=" cursor-pointer active:scale-95 transition-all duration-300" shadow="hover"
+              style="--el-card-padding: 10px">
+              <img :src="item.cover || '/images/default_product.jpg'" class="w-full " />
+              <template #header>
+                <div class="card-header line-clamp-2">
+                  <span>{{ item.name }}</span>
+                </div>
+              </template>
+              <template #footer>
                 <p class="font-bold">{{ item.title }}</p>
                 <p class="text-gray-500 text-sm">No.{{ item.id }}</p>
-              </div>
-            </template>
-          </el-card>
-        </router-link>
+              </template>
+            </el-card>
+          </router-link> -->
+        </div>
+        <el-empty v-else class="mx-auto my-5" description="No data at present." />
 
       </el-col>
-      <el-empty v-else class="mx-auto my-5" description="No data at present." />
 
       <div class="w-full mb-6 px-4 flex justify-end">
         <el-pagination background layout="prev, pager, next" v-model:current-page="pageData.currentPage"
@@ -121,6 +133,7 @@ const pageData = reactive({
   screenWidth: window.innerWidth,
   currentPage: 1,
   pageSize: 10,
+  keyword: '',
 });
 
 // ---------------- props ----------------
@@ -149,6 +162,18 @@ const handleCurrentChange = val => {
   pageData.currentPage = val;
 };
 
+const onSearch = () => {
+  pageData.currentPage = 1
+  getProductList()
+}
+
+const onReset = () => {
+  pageData.keyword = ''
+  pageData.currentPage = 1
+  getProductList()
+}
+
+
 
 // -------------------- 路由跳转 --------------------
 const navigate = async (path, query) => {
@@ -163,19 +188,22 @@ const navigate = async (path, query) => {
 // -------------------- API 调用 --------------------
 const getProductList = async () => {
   if (!cateId.value) return
-  const loading = ElLoading.service({
-    lock: true,
-    text: 'Loading',
-    background: 'rgba(0, 0, 0, 0.7)',
-  })
   try {
-    const res = await getProductIndexApi({
+    const query = {
       cate_id: cateId.value,
       page: pageData.currentPage,
       page_size: pageData.pageSize,
-    })
+    }
+
+    if (pageData.keyword?.trim()) {
+      query.name = pageData.keyword.trim()
+    }
+
+    const res = await getProductIndexApi(query)
+
     productList.value = res?.items || []
     pagination.value = res?.pagination || null
+    goAnchor('productList')
   } catch (err) {
     console.error('获取产品列表失败:', err)
     productList.value = []
@@ -183,7 +211,7 @@ const getProductList = async () => {
 
   } finally {
     // 请求完成或异常都关闭 loading
-    loading.close()
+    // loading.close()
     dropdown1.value.handleClose()
   }
 }
@@ -195,6 +223,7 @@ watch(
   cateId,
   () => {
     pageData.currentPage = 1
+    pageData.keyword = ''
     getProductList()
   },
   { immediate: true }

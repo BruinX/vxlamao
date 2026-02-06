@@ -72,11 +72,11 @@ const cateData = computed(() => {
 // -------------------- API 调用 --------------------
 const getProductInfo = async () => {
   if (!productId.value) return
-  const loading = ElLoading.service({
-    lock: true,
-    text: 'Loading',
-    background: 'rgba(0, 0, 0, 0.7)',
-  })
+  // const loading = ElLoading.service({
+  //   lock: true,
+  //   text: 'Loading',
+  //   background: 'rgba(0, 0, 0, 0.7)',
+  // })
   try {
     const res = await getProductInfoApi({
       id: productId.value,
@@ -89,7 +89,7 @@ const getProductInfo = async () => {
 
   } finally {
     // 请求完成或异常都关闭 loading
-    loading.close()
+    // loading.close()
   }
 }
 

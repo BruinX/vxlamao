@@ -44,7 +44,7 @@
       </div>
     </div>
 
-    <div class="mx-auto grid grid-cols-1 md:grid-cols-2">
+    <div v-if="pageStore.productsCateList" class="mx-auto grid grid-cols-1 md:grid-cols-2">
       <div v-for="item in pageStore.productsCateList" :key="item.id"
         class="w-full h-[35vh] md:h-[48vh] bg-gray-100 relative" data-aos="fade-up">
         <img :src="item.cover" alt="Mask_group" loading="lazy" class="w-full h-full object-cover" />

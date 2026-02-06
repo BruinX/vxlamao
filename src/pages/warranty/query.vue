@@ -83,11 +83,11 @@ const onSubmit = () => {
 
 /* 查询质保单 */
 const fetchGuaranteeSlip = async () => {
-  const loading = ElLoading.service({
-    lock: true,
-    text: 'Loading',
-    background: 'rgba(0, 0, 0, 0.7)',
-  })
+  // const loading = ElLoading.service({
+  //   lock: true,
+  //   text: 'Loading',
+  //   background: 'rgba(0, 0, 0, 0.7)',
+  // })
   try {
     const query = {
       region: select.value,
@@ -125,7 +125,7 @@ const fetchGuaranteeSlip = async () => {
     })
 
   } finally {
-    loading.close()
+    // loading.close()
   }
 }
 
