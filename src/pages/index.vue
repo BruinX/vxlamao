@@ -1,5 +1,5 @@
 <template>
-  <div class="pt-16 lg:pt-0">
+  <div v-if="pageStore.productsCateList" class="pt-16 lg:pt-0">
     <!-- 图片容器 -->
     <div data-aos="fade-down" class="w-full relative overflow-hidden" :style="{ height: `${pageData.screenheight}` }">
       <img src="../assets/image/Mask_group.png" alt="Mask_group" loading="lazy" class="w-full h-full object-cover" />
@@ -44,7 +44,7 @@
       </div>
     </div>
 
-    <div v-if="pageStore.productsCateList" class="mx-auto grid grid-cols-1 md:grid-cols-2">
+    <div class="mx-auto grid grid-cols-1 md:grid-cols-2">
       <div v-for="item in pageStore.productsCateList" :key="item.id"
         class="w-full h-[35vh] md:h-[48vh] bg-gray-100 relative" data-aos="fade-up">
         <img :src="item.cover" alt="Mask_group" loading="lazy" class="w-full h-full object-cover" />
